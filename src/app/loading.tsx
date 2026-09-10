@@ -1,0 +1,1 @@
+export default function Loading(){return <main className="shell"><div className="card loading-card"><div className="eyebrow">Ágora Fide</div><h2>Carregando…</h2><p className="muted">Preparando sua experiência.</p></div></main>}

@@ -1,16 +1,3 @@
 "use client";
-import {FormEvent,useState} from "react";
-import Link from "next/link";
-import {getSupabase} from "@/lib/supabase";
-
-export default function Entrar(){
- const [message,setMessage]=useState("");
- async function submit(e:FormEvent<HTMLFormElement>){
-  e.preventDefault();
-  const form=new FormData(e.currentTarget);
-  const email=String(form.get("email")||"");
-  const {error}=await getSupabase().auth.signInWithOtp({email});
-  setMessage(error?error.message:"Enviamos um link de acesso para o seu e-mail.");
- }
- return <main className="shell narrow"><div className="topbar"><Link href="/" className="brand"><small>PLATAFORMA CATÓLICA</small>Ágora Fide</Link></div><div className="card onboarding"><div className="eyebrow">Sua conta</div><h1>Entrar no app</h1><p className="muted">Receba um link seguro por e-mail para acessar sua caminhada, favoritos e reservas.</p><form onSubmit={submit}><label className="field"><span>E-mail</span><input name="email" type="email" required/></label><button className="cta" type="submit">Enviar link de acesso</button></form>{message&&<p className="muted">{message}</p>}</div></main>
-}
+import {FormEvent,useState} from "react";import Link from "next/link";import {useSearchParams} from "next/navigation";import {getSupabase} from "@/lib/supabase";
+export default function Entrar(){const [message,setMessage]=useState("");const [busy,setBusy]=useState(false);const params=useSearchParams();async function submit(e:FormEvent<HTMLFormElement>){e.preventDefault();setBusy(true);const email=String(new FormData(e.currentTarget).get("email")||"").trim();const next=params.get("next")||"/onboarding";const origin=typeof window!=="undefined"?window.location.origin:"";const {error}=await getSupabase().auth.signInWithOtp({email,options:{emailRedirectTo:`${origin}${next}`}});setMessage(error?error.message:"Enviamos um link seguro para o seu e-mail. Abra-o neste dispositivo para continuar.");setBusy(false)}return <main className="shell narrow"><div className="topbar"><Link href="/" className="brand"><small>PLATAFORMA CATÓLICA</small>Ágora Fide</Link></div><div className="card onboarding"><div className="eyebrow">Sua conta</div><h1>Entrar no app</h1><p className="muted">Acesse sem senha para salvar sua caminhada, sua paróquia, favoritos, pedidos e reservas.</p><form onSubmit={submit}><label className="field"><span>E-mail</span><input name="email" type="email" autoComplete="email" required/></label><button className="cta" disabled={busy} type="submit">{busy?"Enviando…":"Enviar link de acesso"}</button></form>{message&&<p className="notice-inline">{message}</p>}<p className="muted tiny">Ao continuar, você declara que leu os <Link href="/termos">Termos de Uso</Link> e a <Link href="/privacidade">Política de Privacidade</Link>.</p></div></main>}
