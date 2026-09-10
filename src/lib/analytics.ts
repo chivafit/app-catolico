@@ -1,0 +1,2 @@
+import {getSupabase} from "@/lib/supabase";
+export async function track(event_name:string,opts:{entity_type?:string;entity_id?:string;parish_id?:string;path?:string;metadata?:Record<string,unknown>}={}){try{const s=getSupabase();const {data:{user}}=await s.auth.getUser();await s.from("analytics_events").insert({user_id:user?.id||null,parish_id:opts.parish_id||null,event_name,entity_type:opts.entity_type||null,entity_id:opts.entity_id||null,path:opts.path||null,metadata:opts.metadata||{}})}catch{}}
