@@ -1,25 +1,23 @@
 import Link from "next/link";
 import {AppShell} from "@/components/AppShell";
 import {BookOpen,Heart,Bus,CalendarDays,ShoppingBag} from "lucide-react";
+import {brl,getCampaigns,getEvents,getParish,getPilgrimages,getProducts,getTodayDevotional,shortDate} from "@/lib/data";
 
-const products=["Bíblia Sagrada — edição de estudo","Terço Nossa Senhora Aparecida","São Bento — vida e espiritualidade"];
-
-export default function HomePage(){return <AppShell>
-  <section className="hero">
-    <div className="card hero-card">
-      <div><div className="eyebrow">Seu encontro diário</div><h1 style={{marginTop:10}}>Comece o dia com Deus.</h1><p className="quote">Evangelho, reflexão, oração e um propósito simples para levar a fé para a vida.</p></div>
-      <div><span className="tag">Momento Diário • 4 min</span><p className="muted">Uma experiência curta para criar constância, não culpa.</p><Link className="cta" href="/momento"><BookOpen size={17}/> Começar meu momento</Link></div>
-    </div>
-    <div className="card"><div className="eyebrow">Minha igreja</div><h2 style={{marginTop:8}}>Sua paróquia, mais perto</h2><p className="muted">Horários, avisos, eventos, campanhas e comunidade em um só lugar.</p><div className="list"><div className="row"><span>Santa Missa</span><b>19h</b></div><div className="row"><span>Novena</span><b>19h45</b></div><div className="row"><span>Confissões</span><b>14h–17h</b></div></div><Link href="/igreja" className="cta secondary" style={{marginTop:18}}>Ver minha paróquia</Link></div>
-  </section>
-
-  <div className="section-head"><div><div className="eyebrow">Para você</div><h2>O que está acontecendo</h2></div><Link href="/explorar" className="muted">Explorar tudo →</Link></div>
-  <section className="grid">
-    <Link href="/campanhas" className="card"><div className="iconbox"><Heart size={20}/></div><span className="tag">Campanha verificada</span><h3 style={{marginTop:12}}>Reforma da Igreja Matriz</h3><p className="muted">R$ 57.420 de R$ 80.000</p><div className="progress"><span style={{width:"72%"}}/></div><p><b>72% alcançado</b></p></Link>
-    <Link href="/peregrinacoes" className="card"><div className="iconbox"><Bus size={20}/></div><span className="tag">Peregrinação</span><h3 style={{marginTop:12}}>Aparecida</h3><p className="muted">24–26 outubro • saída regional</p><p className="product-price">R$ 749</p><small className="muted">12 vagas restantes</small></Link>
-    <Link href="/explorar" className="card"><div className="iconbox"><CalendarDays size={20}/></div><span className="tag">Evento</span><h3 style={{marginTop:12}}>Festa da Padroeira</h3><p className="muted">15 set • comunidade local</p><b>Gratuito</b></Link>
-  </section>
-
-  <div className="section-head"><div><div className="eyebrow">Livraria</div><h2>Continue se aprofundando</h2></div><Link href="/livros" className="muted">Ver livraria →</Link></div>
-  <section className="grid">{products.map((p,i)=><Link href="/loja" className="card" key={p}><div className="iconbox"><ShoppingBag size={20}/></div><span className="pill">{i===1?"Terços":"Livros"}</span><h3 style={{marginTop:14}}>{p}</h3><p className="product-price">{["R$ 119,90","R$ 69,90","R$ 54,90"][i]}</p></Link>)}</section>
-</AppShell>}
+export default async function HomePage(){
+  const [devotional,parish,events,campaigns,pilgrimages,products]=await Promise.all([getTodayDevotional(),getParish(),getEvents(),getCampaigns(),getPilgrimages(),getProducts()]);
+  const campaign=campaigns[0]; const pilgrimage=pilgrimages[0]; const event=events[0];
+  return <AppShell>
+    <section className="hero">
+      <div className="card hero-card"><div><div className="eyebrow">Seu encontro diário</div><h1 style={{marginTop:10}}>{devotional?.title||"Comece o dia com Deus."}</h1><p className="quote">{devotional?.reflection||"Evangelho, reflexão, oração e um propósito simples para levar a fé para a vida."}</p></div><div><span className="tag">Momento Diário • 4 min</span><p className="muted">Uma experiência curta para criar constância.</p><Link className="cta" href="/momento"><BookOpen size={17}/> Começar meu momento</Link></div></div>
+      <div className="card"><div className="eyebrow">Minha igreja</div><h2 style={{marginTop:8}}>{parish?.name||"Escolha sua paróquia"}</h2><p className="muted">{parish?`${parish.city} • ${parish.state}`:"Vincule sua comunidade para ver horários e avisos."}</p><Link href="/igreja" className="cta secondary" style={{marginTop:18}}>Ver minha paróquia</Link></div>
+    </section>
+    <div className="section-head"><div><div className="eyebrow">Para você</div><h2>O que está acontecendo</h2></div><Link href="/explorar" className="muted">Explorar tudo →</Link></div>
+    <section className="grid">
+      {campaign&&<Link href="/campanhas" className="card"><div className="iconbox"><Heart size={20}/></div><span className="tag">Campanha verificada</span><h3 style={{marginTop:12}}>{campaign.title}</h3><p className="muted">{campaign.description}</p></Link>}
+      {pilgrimage&&<Link href="/peregrinacoes" className="card"><div className="iconbox"><Bus size={20}/></div><span className="tag">Peregrinação</span><h3 style={{marginTop:12}}>{pilgrimage.destination}</h3><p className="muted">{shortDate(pilgrimage.starts_at)} • saída de {pilgrimage.origin_city||"a confirmar"}</p><p className="product-price">{brl(pilgrimage.price_cents)}</p></Link>}
+      {event&&<Link href="/explorar" className="card"><div className="iconbox"><CalendarDays size={20}/></div><span className="tag">Evento</span><h3 style={{marginTop:12}}>{event.title}</h3><p className="muted">{shortDate(event.starts_at)} • {event.location||"local a confirmar"}</p><b>{event.price_cents?brl(event.price_cents):"Gratuito"}</b></Link>}
+    </section>
+    <div className="section-head"><div><div className="eyebrow">Livraria</div><h2>Continue se aprofundando</h2></div><Link href="/loja" className="muted">Ver tudo →</Link></div>
+    <section className="grid">{products.slice(0,3).map((p)=><Link href="/loja" className="card" key={p.id}><div className="iconbox"><ShoppingBag size={20}/></div><span className="pill">{p.category}</span><h3 style={{marginTop:14}}>{p.name}</h3><p className="product-price">{brl(p.price_cents)}</p></Link>)}</section>
+  </AppShell>;
+}
