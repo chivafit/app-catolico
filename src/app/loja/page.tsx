@@ -1,12 +1,2 @@
-import Link from "next/link";
-import { AppShell } from "@/components/AppShell";
-import { brl, getProducts } from "@/lib/data";
-
-export default async function Loja(){
-  const products = await getProducts();
-  return <AppShell>
-    <div className="page-title"><div className="eyebrow">Livraria & marketplace</div><h1>Fé que acompanha sua casa.</h1><p className="muted">Livros, artigos devocionais e presentes selecionados.</p></div>
-    <div className="section-head"><h2>Destaques</h2><Link href="/livros" className="muted">Ir para Livraria →</Link></div>
-    <section className="grid two">{products.map((p)=><div className="card" key={p.id}><span className="tag">{p.category}</span><h2 style={{marginTop:14}}>{p.name}</h2><p className="muted">Vendido por parceiro verificado</p><p className="product-price">{brl(p.price_cents)}</p><button className="cta">Ver produto</button></div>)}</section>
-  </AppShell>;
-}
+import Link from "next/link";import {AppShell} from "@/components/AppShell";import {CartAdd} from "@/components/CartAdd";import {brl,getProducts} from "@/lib/data";
+export default async function Loja(){const products=await getProducts();return <AppShell><div className="page-title"><div className="eyebrow">Livraria & marketplace</div><h1>Fé que acompanha sua casa.</h1><p className="muted">Catálogo do piloto com carrinho funcional. O pagamento real permanece desativado até a integração do gateway.</p></div><div className="section-head"><h2>Destaques</h2><div><Link href="/livros" className="muted">Livraria →</Link> &nbsp; <Link href="/carrinho" className="cta secondary">Ver carrinho</Link></div></div><section className="grid two">{products.length?products.map(p=><article className="card" key={p.id}><span className="tag">{p.category}</span><h2 style={{marginTop:14}}>{p.name}</h2><p className="muted">{p.description||"Produto de parceiro cadastrado no marketplace."}</p><p className="product-price">{brl(p.price_cents)}</p>{p.stock===0?<span className="pill">Indisponível</span>:<CartAdd id={p.id} name={p.name} price_cents={p.price_cents}/>}</article>):<div className="card"><h2>Catálogo em preparação</h2><p className="muted">Nenhum produto ativo neste momento.</p></div>}</section></AppShell>}

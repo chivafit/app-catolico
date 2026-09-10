@@ -9,18 +9,23 @@
 - Momento Diário com conclusão, sequência (streak), favoritos e compartilhamento
 - Minha Igreja personalizada por usuário com horários, avisos, eventos, campanhas e contatos
 - Perfil real com indicadores de caminhada, favoritos, pedidos e reservas
+- Explorar com dados reais
+- Marketplace com catálogo e carrinho local funcional, sem cobrança
+- Peregrinações com registro autenticado de interesse, sem cobrança
+- Campanhas carregadas do banco com contribuição financeira bloqueada no piloto
 - Painéis `/admin`, `/vendedor` e `/organizador` condicionados à permissão/vínculo real
 - Estados globais de loading e erro
 - Política de Privacidade e Termos em versão funcional de piloto
-- Marketplace, pedidos, reservas e transações estruturados no banco
 - Vercel mantida em stand by sem bloquear desenvolvimento
 
 ## Segurança desta etapa
+- Security Advisor do Supabase: sem alertas
 - RLS permanece habilitado
 - Escritas de conclusão/favoritos vinculadas ao `auth.uid()`
-- Novos pedidos e reservas só podem ser criados pelo próprio usuário
-- Vendedor e organizador ganharam vínculo de responsável (`owner_user_id`)
+- Interesse em peregrinação só pode ser gravado pelo próprio usuário, com valor zero e status `interest`
+- Vendedor e organizador possuem vínculo de responsável (`owner_user_id`)
 - Usuário comum não pode se promover a administrador paroquial pelas políticas de autoatendimento
+- Checkout real não aceita escrita financeira pelo cliente nesta fase
 
 ## Ainda bloqueado de propósito antes de produção comercial
 - Checkout/gateway real, antifraude, webhook e split
@@ -32,4 +37,4 @@
 - Vercel, domínio e redirects finais do Supabase Auth
 
 ## Próximo gate
-Rodar beta publicado com usuários reais e medir: retorno ao Momento Diário, adesão às paróquias e intenção/transação em ao menos um motor de receita.
+Publicar beta, executar smoke test no ambiente real e medir: retorno ao Momento Diário, adesão às paróquias e intenção/transação em pelo menos um motor de receita.
