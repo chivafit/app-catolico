@@ -20,7 +20,7 @@ Uma funcionalidade só pode ser marcada como pronta quando houver: interface mob
 - [x] Campanhas básicas
 - [x] Loja/livros básicos e carrinho
 - [x] Peregrinações básicas
-- [~] Painel paroquial — estrutura inicial; completar CRUD e papéis
+- [x] Painel paroquial — CRUD de dados, horários, avisos, eventos e campanhas com RLS por admin/editor
 - [ ] Analytics essenciais — ativação, retenção, conclusão do Momento, ativos por paróquia e CTR
 
 ## Pendências do MVP detalhado
@@ -49,10 +49,10 @@ Uma funcionalidade só pode ser marcada como pronta quando houver: interface mob
 - [ ] histórico de momentos
 
 ### Minha Igreja
-- [ ] foto, diocese, contatos e links oficiais completos
-- [ ] mapa/como chegar
-- [ ] confissões, adoração, celebrações e secretaria
-- [ ] campanhas na página da igreja
+- [x] dados institucionais, diocese, contatos e links oficiais
+- [x] mapa/como chegar
+- [x] missas, confissões, adoração, celebrações e secretaria
+- [x] avisos, eventos e campanhas na página da igreja
 
 ### Eventos
 - [ ] filtros por data/local/tipo
@@ -74,12 +74,13 @@ Uma funcionalidade só pode ser marcada como pronta quando houver: interface mob
 - [ ] categorias completas básicas
 
 ### Painel paroquial
-- [ ] editar dados
-- [ ] CRUD horários
-- [ ] CRUD avisos
-- [ ] CRUD eventos
-- [ ] CRUD campanhas
-- [ ] admin/editor e permissões
+- [x] editar dados da paróquia
+- [x] CRUD horários de missa
+- [x] CRUD confissão/adoração/celebrações/secretaria
+- [x] CRUD avisos
+- [x] CRUD eventos
+- [x] CRUD campanhas
+- [x] admin/editor protegidos por AuthGuard + RLS
 
 ### Analytics essenciais
 - [ ] ativação
