@@ -8,103 +8,36 @@ FÉ faz o usuário voltar. COMUNIDADE faz o usuário participar. ECONOMIA faz a 
 > A paróquia distribui, o conteúdo retém e a economia monetiza.
 
 ## Regra de aceite
-Uma funcionalidade só pode ser marcada como pronta quando houver: interface mobile-first, lógica funcional, persistência quando aplicável, permissões/RLS, estados vazio/loading/erro e navegação integrada. Tela ou card isolado não significa funcionalidade concluída.
+Uma funcionalidade só pode ser marcada como pronta quando houver interface mobile-first, lógica funcional, persistência quando aplicável, permissões/RLS, estados vazio/loading/erro e navegação integrada.
 
-## MVP — fechar antes da Fase 2
-- [x] Conta/login base
-- [x] Onboarding base e paróquia principal
+## MVP
+- [x] Conta/login base por e-mail/magic link (login por telefone retirado do escopo por decisão de produto)
+- [x] Onboarding e paróquia principal
 - [x] Home mobile-first
-- [x] Momento Diário base (conteúdo, conclusão, streak, favorito, compartilhar)
-- [x] Minha Igreja base (dados, missas, avisos, eventos)
-- [x] Eventos básicos
-- [x] Campanhas básicas
-- [x] Loja/livros básicos e carrinho
+- [x] Momento Diário
+- [x] Minha Igreja
+- [x] Eventos
+- [x] Campanhas
+- [x] Loja/livros e carrinho
 - [x] Peregrinações básicas
 - [x] Busca Global + Explorar
-- [x] Painel paroquial — CRUD de dados, horários, avisos, eventos e campanhas com RLS por admin/editor
-- [x] Analytics essenciais — ativação, atividade D1/D7/D30, conclusão do Momento, ativos por paróquia e CTR
+- [x] Painel paroquial com RLS
+- [x] Analytics essenciais
+- [x] Recomendações contextuais na Home
 
-## Pendências do MVP detalhado
-### Conta e personalização
-- [ ] telefone como opção de autenticação (depende de provedor SMS no Supabase)
-- [x] telefone opcional no perfil
-- [x] recuperação de acesso explícita por magic link
-- [x] exportação LGPD e solicitação de exclusão
-- [x] seguir outras igrejas/santuários
-- [x] interesses e preferências de notificação
+## Recomendações contextuais — implementado
+O motor inicial é determinístico e explicável, sem IA generativa decidindo conteúdo religioso. A prioridade é: Momento Diário/liturgia disponível → vida da paróquia → oração conforme período do dia → próximo evento → campanha → peregrinação → descoberta da loja. A Home apresenta o rail “Para você hoje” e cada recomendação leva a uma funcionalidade existente.
 
-### Home
-- [x] saudação/data personalizada
-- [x] agenda da paróquia
-- [x] próxima missa e confissão do dia
-- [x] avisos oficiais na Home
-- [ ] recomendações litúrgicas/contextuais avançadas
+A fonte editorial litúrgica brasileira indicada para validação institucional é a Edições CNBB / Igreja em Oração, que disponibiliza celebração do dia, cor litúrgica e leituras com base na tradução oficial brasileira. O app não replica automaticamente textos integrais dessa fonte até existir autorização/licença ou integração formal. Enquanto isso, usa o conteúdo editorial persistido em `daily_devotionals`, com campo de fonte explícita.
 
-### Busca global
-- [x] paróquias/igrejas, eventos, livros, produtos, peregrinações e conteúdos
-- [x] santuários entram na descoberta quando cadastrados como comunidade/paróquia
-- [x] filtros por tipo, cidade e data
-- [x] busca textual por nome, descrição, categoria e local
-- [x] filtro de proximidade mediante permissão do usuário e coordenadas cadastradas
-- [x] estados de loading, erro, vazio e limpar filtros
-- [x] páginas públicas de igrejas acessíveis pelos resultados
+## Funcionalidades detalhadas já cobertas
+Conta/perfil/LGPD; recuperação por magic link; seguir igrejas; preferências; agenda e avisos na Home; busca por tipo/cidade/data/texto/proximidade; Momento Diário com fonte/reflexão/áudio/histórico; Minha Igreja com contatos/mapa/celebrações/secretaria; eventos; campanhas; peregrinações; loja/livraria; CRUD paroquial; analytics D1/D7/D30, ativação, Momento, ativos por paróquia e CTR.
 
-### Momento Diário / fé
-- [x] suporte a fonte editorial explícita
-- [x] pergunta para reflexão
-- [x] player de áudio quando houver audio_url
-- [x] histórico de momentos concluídos
+## Pendência externa antes de declarar MVP 100% validado
+- [ ] auditoria ponta a ponta no deployment de produção e conteúdo real do piloto.
+- [ ] formalizar autorização/licença com a fonte litúrgica escolhida antes de importar ou reproduzir textos integrais de terceiros.
 
-### Minha Igreja
-- [x] dados institucionais, diocese, contatos e links oficiais
-- [x] mapa/como chegar
-- [x] missas, confissões, adoração, celebrações e secretaria
-- [x] avisos, eventos e campanhas na página da igreja
-
-### Eventos
-- [x] filtros por data/local/tipo
-- [x] cadastro/inscrição básica do participante sem pagamento real
-
-### Campanhas
-- [x] suporte a foto/vídeo, instituição, selo, meta, progresso, prazo e atualizações
-- [x] compartilhar
-
-### Peregrinações
-- [x] busca por cidade de saída
-- [x] roteiro, vagas, foto/galeria e organizador verificado
-- [x] favoritar/compartilhar
-
-### Loja/livros
-- [x] busca e filtros funcionais próprios da Loja
-- [x] favoritos de produto/livro
-- [x] página individual de produto
-- [x] categorias básicas dinâmicas do catálogo
-- [x] Livraria conectada ao catálogo real por título/autor/categoria
-
-### Painel paroquial
-- [x] editar dados da paróquia
-- [x] CRUD horários de missa
-- [x] CRUD confissão/adoração/celebrações/secretaria
-- [x] CRUD avisos
-- [x] CRUD eventos
-- [x] CRUD campanhas
-- [x] admin/editor protegidos por AuthGuard + RLS
-
-### Analytics essenciais
-- [x] instrumentação persistente em analytics_events
-- [x] ativação por onboarding concluído
-- [x] atividade D1/D7/D30
-- [x] abertura e conclusão do Momento Diário
-- [x] usuários ativos por paróquia
-- [x] CTR inicial de Explorar/Eventos, Campanhas e Loja
-- [x] dashboard paroquial protegido em /admin/analytics
-
-## Pendências externas antes de declarar MVP 100% fechado
-- [ ] autenticação por telefone: configurar provedor SMS no Supabase
-- [ ] recomendações litúrgicas/contextuais avançadas: definir fonte editorial/dados e regras de recomendação
-- [ ] auditoria final ponta a ponta em produção e conteúdo real de piloto
-
-## Fase 2 — somente após MVP
+## Fase 2
 Checkout real; split/repasses; painel vendedor; ingressos QR; reserva de peregrinações; carteira/extrato; Premium; push notifications; biblioteca digital licenciada.
 
 ## Fase 3
