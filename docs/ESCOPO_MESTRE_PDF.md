@@ -26,18 +26,19 @@ Uma funcionalidade só pode ser marcada como pronta quando houver: interface mob
 
 ## Pendências do MVP detalhado
 ### Conta e personalização
-- [ ] telefone como opção de cadastro
-- [ ] recuperação de acesso explícita
-- [ ] exclusão de conta e exportação LGPD
-- [ ] seguir outras igrejas/santuários
-- [ ] interesses e preferências de notificação
+- [ ] telefone como opção de autenticação (depende de provedor SMS no Supabase)
+- [x] telefone opcional no perfil
+- [x] recuperação de acesso explícita por magic link
+- [x] exportação LGPD e solicitação de exclusão
+- [x] seguir outras igrejas/santuários
+- [x] interesses e preferências de notificação
 
 ### Home
-- [ ] saudação/data personalizada
-- [ ] agenda da paróquia no dia
-- [ ] próxima missa e confissão
-- [ ] avisos oficiais na Home
-- [ ] recomendações litúrgicas/contextuais
+- [x] saudação/data personalizada
+- [x] agenda da paróquia
+- [x] próxima missa e confissão do dia
+- [x] avisos oficiais na Home
+- [ ] recomendações litúrgicas/contextuais avançadas
 
 ### Busca global
 - [x] paróquias/igrejas, eventos, livros, produtos, peregrinações e conteúdos
@@ -49,10 +50,10 @@ Uma funcionalidade só pode ser marcada como pronta quando houver: interface mob
 - [x] páginas públicas de igrejas acessíveis pelos resultados
 
 ### Momento Diário / fé
-- [ ] fonte editorial explícita
-- [ ] pergunta para reflexão
-- [ ] áudio
-- [ ] histórico de momentos
+- [x] suporte a fonte editorial explícita
+- [x] pergunta para reflexão
+- [x] player de áudio quando houver audio_url
+- [x] histórico de momentos concluídos
 
 ### Minha Igreja
 - [x] dados institucionais, diocese, contatos e links oficiais
