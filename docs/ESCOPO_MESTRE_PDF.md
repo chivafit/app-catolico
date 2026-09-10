@@ -22,7 +22,7 @@ Uma funcionalidade só pode ser marcada como pronta quando houver: interface mob
 - [x] Peregrinações básicas
 - [x] Busca Global + Explorar
 - [x] Painel paroquial — CRUD de dados, horários, avisos, eventos e campanhas com RLS por admin/editor
-- [ ] Analytics essenciais — ativação, retenção, conclusão do Momento, ativos por paróquia e CTR
+- [x] Analytics essenciais — ativação, atividade D1/D7/D30, conclusão do Momento, ativos por paróquia e CTR
 
 ## Pendências do MVP detalhado
 ### Conta e personalização
@@ -89,11 +89,13 @@ Uma funcionalidade só pode ser marcada como pronta quando houver: interface mob
 - [x] admin/editor protegidos por AuthGuard + RLS
 
 ### Analytics essenciais
-- [ ] ativação
-- [ ] D1/D7/D30
-- [ ] conclusão do Momento Diário
-- [ ] usuários ativos por paróquia
-- [ ] CTR eventos/campanhas/loja
+- [x] instrumentação persistente em analytics_events
+- [x] ativação por onboarding concluído
+- [x] atividade D1/D7/D30
+- [x] abertura e conclusão do Momento Diário
+- [x] usuários ativos por paróquia
+- [x] CTR inicial de Explorar/Eventos, Campanhas e Loja
+- [x] dashboard paroquial protegido em /admin/analytics
 
 ## Fase 2 — somente após MVP
 Checkout real; split/repasses; painel vendedor; ingressos QR; reserva de peregrinações; carteira/extrato; Premium; push notifications; biblioteca digital licenciada.
