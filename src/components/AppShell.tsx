@@ -1,0 +1,4 @@
+"use client";
+import Link from "next/link";import {ReactNode} from "react";import {Home,Church,Compass,ShoppingBag,UserRound} from "lucide-react";import {usePathname} from "next/navigation";
+const links=[["/","Início",Home],["/igreja","Minha Igreja",Church],["/explorar","Explorar",Compass],["/loja","Loja",ShoppingBag],["/perfil","Perfil",UserRound]] as const;
+export function AppShell({children}:{children:ReactNode}){const path=usePathname();return <><main className="shell"><div className="topbar"><Link href="/" className="brand"><small>PLATAFORMA CATÓLICA</small>Ágora Fide</Link><Link href="/perfil" className="avatar">IR</Link></div>{children}</main><nav className="bottomnav">{links.map(([href,label,Icon])=>{const active=href==="/"?path==="/":path.startsWith(href);return <Link className={`navitem ${active?"active":""}`} href={href} key={href}><Icon size={19}/><span>{label}</span></Link>})}</nav></>}
