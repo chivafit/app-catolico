@@ -20,6 +20,7 @@ Uma funcionalidade só pode ser marcada como pronta quando houver: interface mob
 - [x] Campanhas básicas
 - [x] Loja/livros básicos e carrinho
 - [x] Peregrinações básicas
+- [x] Busca Global + Explorar
 - [x] Painel paroquial — CRUD de dados, horários, avisos, eventos e campanhas com RLS por admin/editor
 - [ ] Analytics essenciais — ativação, retenção, conclusão do Momento, ativos por paróquia e CTR
 
@@ -39,8 +40,13 @@ Uma funcionalidade só pode ser marcada como pronta quando houver: interface mob
 - [ ] recomendações litúrgicas/contextuais
 
 ### Busca global
-- [ ] paróquias, igrejas, santuários, eventos, livros, produtos, peregrinações e conteúdos
-- [ ] filtros por cidade, data, categoria, devoção e proximidade
+- [x] paróquias/igrejas, eventos, livros, produtos, peregrinações e conteúdos
+- [x] santuários entram na descoberta quando cadastrados como comunidade/paróquia
+- [x] filtros por tipo, cidade e data
+- [x] busca textual por nome, descrição, categoria e local
+- [x] filtro de proximidade mediante permissão do usuário e coordenadas cadastradas
+- [x] estados de loading, erro, vazio e limpar filtros
+- [x] páginas públicas de igrejas acessíveis pelos resultados
 
 ### Momento Diário / fé
 - [ ] fonte editorial explícita
@@ -68,7 +74,7 @@ Uma funcionalidade só pode ser marcada como pronta quando houver: interface mob
 - [ ] favoritar/compartilhar
 
 ### Loja/livros
-- [ ] busca e filtros funcionais
+- [ ] busca e filtros funcionais próprios da Loja
 - [ ] favoritos de produto/livro
 - [ ] página individual de produto
 - [ ] categorias completas básicas
