@@ -1,0 +1,1 @@
+"use client";import {Share2} from "lucide-react";export function ShareButton({title}:{title:string}){async function share(){const url=location.href;if(navigator.share)await navigator.share({title,url});else await navigator.clipboard.writeText(url)}return <button className="cta secondary" onClick={share}><Share2 size={16}/>Compartilhar</button>}
