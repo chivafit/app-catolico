@@ -62,23 +62,24 @@ Uma funcionalidade só pode ser marcada como pronta quando houver: interface mob
 - [x] avisos, eventos e campanhas na página da igreja
 
 ### Eventos
-- [ ] filtros por data/local/tipo
-- [ ] cadastro/inscrição básica do participante (sem pagamento real nesta fase)
+- [x] filtros por data/local/tipo
+- [x] cadastro/inscrição básica do participante sem pagamento real
 
 ### Campanhas
-- [ ] fotos/vídeo, instituição, selo, meta, progresso, prazo e atualizações
-- [ ] compartilhar
+- [x] suporte a foto/vídeo, instituição, selo, meta, progresso, prazo e atualizações
+- [x] compartilhar
 
 ### Peregrinações
-- [ ] busca por cidade de saída
-- [ ] roteiro, vagas, fotos e organizador verificado
-- [ ] favoritar/compartilhar
+- [x] busca por cidade de saída
+- [x] roteiro, vagas, foto/galeria e organizador verificado
+- [x] favoritar/compartilhar
 
 ### Loja/livros
-- [ ] busca e filtros funcionais próprios da Loja
-- [ ] favoritos de produto/livro
-- [ ] página individual de produto
-- [ ] categorias completas básicas
+- [x] busca e filtros funcionais próprios da Loja
+- [x] favoritos de produto/livro
+- [x] página individual de produto
+- [x] categorias básicas dinâmicas do catálogo
+- [x] Livraria conectada ao catálogo real por título/autor/categoria
 
 ### Painel paroquial
 - [x] editar dados da paróquia
@@ -97,6 +98,11 @@ Uma funcionalidade só pode ser marcada como pronta quando houver: interface mob
 - [x] usuários ativos por paróquia
 - [x] CTR inicial de Explorar/Eventos, Campanhas e Loja
 - [x] dashboard paroquial protegido em /admin/analytics
+
+## Pendências externas antes de declarar MVP 100% fechado
+- [ ] autenticação por telefone: configurar provedor SMS no Supabase
+- [ ] recomendações litúrgicas/contextuais avançadas: definir fonte editorial/dados e regras de recomendação
+- [ ] auditoria final ponta a ponta em produção e conteúdo real de piloto
 
 ## Fase 2 — somente após MVP
 Checkout real; split/repasses; painel vendedor; ingressos QR; reserva de peregrinações; carteira/extrato; Premium; push notifications; biblioteca digital licenciada.
