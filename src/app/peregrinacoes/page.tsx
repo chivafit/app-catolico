@@ -14,7 +14,7 @@ type Trip={id:string;title?:string|null;destination?:string|null;destination_id?
 const brl=(c:number|null|undefined)=>c==null?"Sob consulta":new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(c/100);
 const fallback="https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=82";
 const one=<T,>(v:T|T[]|null|undefined):T|undefined=>Array.isArray(v)?v[0]:v||undefined;
-const imgFor=(d:Destination|Trip)=>('hero_image_url' in d&&d.hero_image_url)||d.image_url||fallback;
+const imgFor=(d:Destination|Trip)=>{if("hero_image_url" in d&&d.hero_image_url)return d.hero_image_url;if("image_url" in d&&d.image_url)return d.image_url;return fallback};
 
 export default function Peregrinacoes(){
  const [trips,setTrips]=useState<Trip[]>([]),[destinations,setDestinations]=useState<Destination[]>([]),[origin,setOrigin]=useState(""),[destination,setDestination]=useState(""),[transport,setTransport]=useState("");
