@@ -1,8 +1,7 @@
 /* VINDE — contrast guardrails
-   Global rule: any intentionally dark branded surface must use light text.
-   Loaded after the rest of the visual system so legacy component colors cannot win. */
+   Global rule: intentionally dark branded surfaces always use readable light text.
+   Loaded last so legacy component colors cannot override accessibility. */
 
-/* Core dark branded surfaces */
 .home-v3-daily,
 .v3-module.navy,
 .v3-module.cobalt,
@@ -17,11 +16,9 @@
 .sidebar,
 .hero-card,
 [class~="dark-surface"],
-[class~="vinde-dark"]{
-  color:#fff!important;
-}
+[class~="vinde-dark"]{color:#fff!important}
 
-/* Main text on dark surfaces */
+/* Primary content on dark surfaces */
 .home-v3-daily :is(h1,h2,h3,h4,h5,h6,strong,b,label),
 .v3-module.navy :is(h1,h2,h3,h4,h5,h6,strong,b,label),
 .v3-module.cobalt :is(h1,h2,h3,h4,h5,h6,strong,b,label),
@@ -36,11 +33,9 @@
 .sidebar :is(h1,h2,h3,h4,h5,h6,strong,b,label),
 .hero-card :is(h1,h2,h3,h4,h5,h6,strong,b,label),
 [class~="dark-surface"] :is(h1,h2,h3,h4,h5,h6,strong,b,label),
-[class~="vinde-dark"] :is(h1,h2,h3,h4,h5,h6,strong,b,label){
-  color:#fff!important;
-}
+[class~="vinde-dark"] :is(h1,h2,h3,h4,h5,h6,strong,b,label){color:#fff!important}
 
-/* Supporting copy gets a slightly softer white, still readable */
+/* Supporting copy on dark surfaces */
 .home-v3-daily :is(p,small),
 .v3-module.navy :is(p,small),
 .v3-module.cobalt :is(p,small),
@@ -55,11 +50,23 @@
 .sidebar :is(p,small),
 .hero-card :is(p,small),
 [class~="dark-surface"] :is(p,small),
-[class~="vinde-dark"] :is(p,small){
-  color:#edf2f7!important;
-}
+[class~="vinde-dark"] :is(p,small){color:#edf2f7!important}
 
-/* Icons inherit the light foreground unless a component intentionally uses champagne */
+/* Checkout needs explicit span protection because several legacy selectors target spans */
+.trip-checkout .trip-passengers span,
+.trip-checkout .trip-deposit span,
+.trip-checkout .trip-total span,
+.trip-checkout .trip-payment-options span,
+.trip-checkout .trip-payment-options strong,
+.trip-checkout .trip-payment-title,
+.trip-checkout .trip-stepper b{color:#fff!important}
+.trip-checkout .trip-passengers small,
+.trip-checkout .trip-payment-options small,
+.trip-checkout .trip-deposit,
+.trip-checkout .trip-secure{color:#dbe3ec!important}
+.trip-checkout .trip-total strong{color:#fff!important}
+
+/* Icons inherit readable foreground, with champagne used only as accent */
 .home-v3-daily svg,
 .v3-module.navy svg,
 .v3-module.cobalt svg,
@@ -74,19 +81,21 @@
 .sidebar svg,
 .hero-card svg,
 [class~="dark-surface"] svg,
-[class~="vinde-dark"] svg{
-  color:currentColor;
-}
+[class~="vinde-dark"] svg{color:currentColor}
+.dest-dark-card>svg,.dest-spiritual-guide>svg,.trip-checkout-head>svg{color:#d1b07d!important}
 
-/* Preserve intentional champagne accents on dark surfaces */
-.dest-dark-card>svg,
-.dest-spiritual-guide>svg,
-.trip-checkout-head>svg,
-.dest-chip,
-.trip-pay-button{
-  color:#d1b07d!important;
+/* Champagne CTA: dark text is mandatory for contrast */
+.trip-pay-button,
+.trip-pay-button:link,
+.trip-pay-button:visited{
+  background:#d1b07d!important;
+  color:#13233a!important;
+  border-color:#d1b07d!important;
+  font-weight:900!important;
 }
+.trip-pay-button:hover,.trip-pay-button:active{background:#c6a36d!important;color:#13233a!important}
+.trip-pay-button *{color:#13233a!important}
 
-/* Specific protection for pilgrimage spiritual card, where legacy text colors were leaking through */
+/* Specific pilgrimage card protection */
 .dest-spiritual-guide strong{color:#fff!important}
-.dest-spiritual-guide p{color:#edf2f7!important}
+.dest-spiritual-guide p{color:#f7f8fa!important}
