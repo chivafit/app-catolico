@@ -1,0 +1,92 @@
+/* VINDE — contrast guardrails
+   Global rule: any intentionally dark branded surface must use light text.
+   Loaded after the rest of the visual system so legacy component colors cannot win. */
+
+/* Core dark branded surfaces */
+.home-v3-daily,
+.v3-module.navy,
+.v3-module.cobalt,
+.v3-module.charcoal,
+.shop-banner,
+.auth-v3-hero,
+.dest-dark-card,
+.dest-spiritual-guide,
+.trip-checkout,
+.church-sheet blockquote,
+.store-banner,
+.sidebar,
+.hero-card,
+[class~="dark-surface"],
+[class~="vinde-dark"]{
+  color:#fff!important;
+}
+
+/* Main text on dark surfaces */
+.home-v3-daily :is(h1,h2,h3,h4,h5,h6,strong,b,label),
+.v3-module.navy :is(h1,h2,h3,h4,h5,h6,strong,b,label),
+.v3-module.cobalt :is(h1,h2,h3,h4,h5,h6,strong,b,label),
+.v3-module.charcoal :is(h1,h2,h3,h4,h5,h6,strong,b,label),
+.shop-banner :is(h1,h2,h3,h4,h5,h6,strong,b,label),
+.auth-v3-hero :is(h1,h2,h3,h4,h5,h6,strong,b,label),
+.dest-dark-card :is(h1,h2,h3,h4,h5,h6,strong,b,label),
+.dest-spiritual-guide :is(h1,h2,h3,h4,h5,h6,strong,b,label),
+.trip-checkout :is(h1,h2,h3,h4,h5,h6,strong,b,label),
+.church-sheet blockquote :is(h1,h2,h3,h4,h5,h6,strong,b,label),
+.store-banner :is(h1,h2,h3,h4,h5,h6,strong,b,label),
+.sidebar :is(h1,h2,h3,h4,h5,h6,strong,b,label),
+.hero-card :is(h1,h2,h3,h4,h5,h6,strong,b,label),
+[class~="dark-surface"] :is(h1,h2,h3,h4,h5,h6,strong,b,label),
+[class~="vinde-dark"] :is(h1,h2,h3,h4,h5,h6,strong,b,label){
+  color:#fff!important;
+}
+
+/* Supporting copy gets a slightly softer white, still readable */
+.home-v3-daily :is(p,small),
+.v3-module.navy :is(p,small),
+.v3-module.cobalt :is(p,small),
+.v3-module.charcoal :is(p,small),
+.shop-banner :is(p,small),
+.auth-v3-hero :is(p,small),
+.dest-dark-card :is(p,small),
+.dest-spiritual-guide :is(p,small),
+.trip-checkout :is(p,small),
+.church-sheet blockquote :is(p,small),
+.store-banner :is(p,small),
+.sidebar :is(p,small),
+.hero-card :is(p,small),
+[class~="dark-surface"] :is(p,small),
+[class~="vinde-dark"] :is(p,small){
+  color:#edf2f7!important;
+}
+
+/* Icons inherit the light foreground unless a component intentionally uses champagne */
+.home-v3-daily svg,
+.v3-module.navy svg,
+.v3-module.cobalt svg,
+.v3-module.charcoal svg,
+.shop-banner svg,
+.auth-v3-hero svg,
+.dest-dark-card svg,
+.dest-spiritual-guide svg,
+.trip-checkout svg,
+.church-sheet blockquote svg,
+.store-banner svg,
+.sidebar svg,
+.hero-card svg,
+[class~="dark-surface"] svg,
+[class~="vinde-dark"] svg{
+  color:currentColor;
+}
+
+/* Preserve intentional champagne accents on dark surfaces */
+.dest-dark-card>svg,
+.dest-spiritual-guide>svg,
+.trip-checkout-head>svg,
+.dest-chip,
+.trip-pay-button{
+  color:#d1b07d!important;
+}
+
+/* Specific protection for pilgrimage spiritual card, where legacy text colors were leaking through */
+.dest-spiritual-guide strong{color:#fff!important}
+.dest-spiritual-guide p{color:#edf2f7!important}
