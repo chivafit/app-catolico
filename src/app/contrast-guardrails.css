@@ -97,3 +97,16 @@ body .shell .dest-trip-card.selected .trip-checkout .trip-secure{color:#fff!impo
   font-weight:900!important;
 }
 .trip-pay-button:hover,.trip-pay-button:active{background:#c6a36d!important;color:#13233a!important;-webkit-text-fill-color:#13233a!important}
+
+/* Home light cards: visible separation from the ivory page background.
+   This file is loaded last, so these rules intentionally win over earlier theme CSS. */
+.home-v3-personal .v3-rec-liturgy{
+  background:#fffdf9!important;
+  border:1px solid rgba(209,176,125,.58)!important;
+  box-shadow:0 2px 8px rgba(19,35,58,.035)!important;
+}
+.home-v3-shortcuts a:first-child{
+  background:#fffdf9!important;
+  border:1px solid rgba(209,176,125,.58)!important;
+  box-shadow:0 2px 8px rgba(19,35,58,.035)!important;
+}
