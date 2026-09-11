@@ -6,7 +6,6 @@ import "./inner-nav.css";
 import "./momento-premium.css";
 import "./vinde-theme.css";
 import "./contrast-guardrails.css";
-import "./product-system.css";
 import type {Metadata} from "next";
 import {AuthProvider} from "@/components/AuthProvider";
 import {AuthUrlHandler} from "@/components/AuthUrlHandler";
@@ -14,7 +13,7 @@ import {AuthUrlHandler} from "@/components/AuthUrlHandler";
 export const metadata:Metadata={
   title:"Vinde — Plataforma Católica",
   description:"Fé, comunidade e experiências em um só lugar.",
-  themeColor:"#3F5F52"
+  themeColor:"#1F3653"
 };
 
 export default function RootLayout({children}:{children:React.ReactNode}){
