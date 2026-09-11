@@ -19,8 +19,7 @@
 [class~="dark-surface"],
 [class~="vinde-dark"]{color:#fff!important}
 
-/* Hard guardrail: EVERY textual descendant on a dark surface is white.
-   This deliberately overrides old selectors that were leaking navy/gray into dark cards. */
+/* Hard guardrail: EVERY textual descendant on a dark surface is white. */
 .home-v3-daily :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
 .v3-module.navy :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
 .v3-module.cobalt :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
@@ -36,6 +35,16 @@
 .hero-card :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
 [class~="dark-surface"] :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
 [class~="vinde-dark"] :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div){color:#fff!important}
+
+/* IMPORTANT: selected pilgrimage cards have legacy selectors with higher specificity.
+   These rules intentionally outrank them so dark nested surfaces always remain readable. */
+.dest-trip-card.selected .dest-spiritual-guide :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,div),
+.dest-trip-card.selected .trip-checkout :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,div),
+.dest-trip-card.selected .trip-checkout .trip-payment-options :is(span,small,strong),
+.dest-trip-card.selected .trip-checkout .trip-passengers :is(span,small,strong),
+.dest-trip-card.selected .trip-checkout .trip-deposit :is(span,small,strong),
+.dest-trip-card.selected .trip-checkout .trip-total :is(span,small,strong),
+.dest-trip-card.selected .trip-checkout .trip-secure{color:#fff!important}
 
 /* Icons on dark areas are white by default. */
 .home-v3-daily svg,
@@ -69,6 +78,10 @@
 .trip-payment-options button.active{border-color:#d1b07d!important}
 
 /* Champagne CTA: dark navy text is required on the LIGHT champagne surface. */
+.dest-trip-card.selected .trip-pay-button,
+.dest-trip-card.selected .trip-pay-button:link,
+.dest-trip-card.selected .trip-pay-button:visited,
+.dest-trip-card.selected .trip-pay-button *,
 .trip-pay-button,
 .trip-pay-button:link,
 .trip-pay-button:visited,
