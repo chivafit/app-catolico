@@ -1,0 +1,21 @@
+/* Vinde — Fase 2A: camada final de consistência visual */
+:root{--v-navy:#1b2f4b;--v-navy2:#294866;--v-gold:#d8b884;--v-gold2:#9f7d48;--v-cream:#fbf8f2;--v-paper:#fffdf9;--v-line:#eadcc5;--v-muted:#73766f;--v-danger:#a94e43;--v-shadow:0 5px 18px rgba(27,47,75,.055)}
+body{background:var(--v-cream)}
+.shell{background:var(--v-cream);color:var(--v-navy)}
+.inner-topbar,.topbar{background:rgba(251,248,242,.96);backdrop-filter:blur(18px)}
+.inner-topbar strong{color:var(--v-navy)}
+.page-title{padding:16px 3px 4px;margin:0 0 18px}.page-title .eyebrow,.eyebrow{color:var(--v-gold2);font-size:9px;letter-spacing:.18em;font-weight:850}.page-title h1{font-family:Arial,sans-serif;font-size:29px;line-height:1.04;font-weight:850;letter-spacing:-.04em;color:var(--v-navy)}.page-title p{color:var(--v-muted);font-size:13px;margin:8px 0 0}.section-head{margin:25px 2px 11px;align-items:center}.section-head h2{font-family:Arial,sans-serif;font-size:18px;font-weight:850;color:var(--v-navy)}
+.card{background:var(--v-paper);border:1px solid var(--v-line);border-radius:18px;box-shadow:var(--v-shadow);color:var(--v-navy)}.card h2,.card h3{font-family:Arial,sans-serif;font-weight:850;color:var(--v-navy)}.muted{color:var(--v-muted)!important}.iconbox{background:#f0e3cf;color:var(--v-navy);border-radius:13px}.tag{background:#f0e3cf;color:var(--v-gold2)}.pill{background:#f0e3cf;color:var(--v-navy)}.pill.selected,.chip-button.selected{background:var(--v-navy);color:#fff}.cta{background:var(--v-navy);color:#fff;border-radius:14px;min-height:44px;font-weight:850}.cta.secondary{background:#f0e3cf;color:var(--v-navy)}.progress{background:#eee5d8;height:7px}.progress span{background:var(--v-gold)}
+.searchbox,.filter-row select,.filter-row input,.field input{border:1px solid #e4d4b9!important;background:var(--v-paper)!important;border-radius:14px!important;color:var(--v-navy);min-height:48px;outline:0}.searchbox:focus,.filter-row select:focus,.filter-row input:focus,.field input:focus{border-color:var(--v-gold2)!important;box-shadow:0 0 0 3px rgba(216,184,132,.15)}.filter-row{display:flex;gap:7px;overflow:auto;padding:0 0 5px;scrollbar-width:none}.filter-row label{flex:0 0 auto}.filter-row select,.filter-row input{padding:0 11px;font-size:11px;min-height:42px}.choice{border-color:var(--v-line);background:var(--v-paper);border-radius:15px}.notice,.notice-inline{background:#f5ecde;border:1px solid #ead9bd;color:var(--v-navy);border-radius:14px;padding:12px}.row{border-color:#eee3d2}.row>a,.profile-list a{min-height:44px;align-items:center}.kpi{font-family:Arial,sans-serif;font-size:31px;font-weight:900;color:var(--v-navy)}
+/* páginas de catálogo/listas que ainda usam componentes genéricos */
+.grid{gap:11px}.grid>.card{min-height:0}.grid>.card img{background:var(--v-paper);object-fit:cover}.grid>.card .actions{margin-top:15px}.grid>.card .cta{font-size:11px;padding:11px 14px}.list.card{padding:6px 16px}.list .row{padding:15px 1px}.list .row small{font-size:10px;color:var(--v-muted)}
+/* painéis B2B: mesma marca, densidade maior */
+.admin-layout,.shell:has(.kpi){background:var(--v-cream)}.sidebar{background:var(--v-navy);border-radius:18px}.sidebar a{border-radius:10px}.sidebar a:hover{background:rgba(255,255,255,.08)}
+/* estados */
+.loading-card,.profile-ref-loading{background:var(--v-paper)!important;border-color:var(--v-line)!important;color:var(--v-muted)}
+.card:has(>h2:first-child):has(>.muted:last-child){box-shadow:none}
+/* toque e acessibilidade */
+button,a,input,select{touch-action:manipulation}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid rgba(159,125,72,.28);outline-offset:2px}.bottomnav{background:rgba(255,253,249,.98);border-top-color:#eadfce}.navitem{color:#7a7d78}.navitem.active{color:var(--v-navy)}
+@media(max-width:390px){.page-title h1{font-size:27px}.card{border-radius:16px;padding:15px}.grid{gap:8px}.filter-row{margin-left:-1px;margin-right:-1px}}
+@media(min-width:521px){body{background:#eee9e0}.shell{box-shadow:0 0 35px rgba(27,47,75,.06)}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
