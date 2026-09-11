@@ -5,6 +5,7 @@ import "./premium.css";
 import "./inner-nav.css";
 import "./momento-premium.css";
 import "./vinde-theme.css";
+import "./contrast-guardrails.css";
 import type {Metadata} from "next";
 import {AuthProvider} from "@/components/AuthProvider";
 import {AuthUrlHandler} from "@/components/AuthUrlHandler";
