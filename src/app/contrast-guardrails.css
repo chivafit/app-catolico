@@ -36,15 +36,19 @@
 [class~="dark-surface"] :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
 [class~="vinde-dark"] :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div){color:#fff!important}
 
-/* IMPORTANT: selected pilgrimage cards have legacy selectors with higher specificity.
-   These rules intentionally outrank them so dark nested surfaces always remain readable. */
-.dest-trip-card.selected .dest-spiritual-guide :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,div),
-.dest-trip-card.selected .trip-checkout :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,div),
-.dest-trip-card.selected .trip-checkout .trip-payment-options :is(span,small,strong),
-.dest-trip-card.selected .trip-checkout .trip-passengers :is(span,small,strong),
-.dest-trip-card.selected .trip-checkout .trip-deposit :is(span,small,strong),
-.dest-trip-card.selected .trip-checkout .trip-total :is(span,small,strong),
-.dest-trip-card.selected .trip-checkout .trip-secure{color:#fff!important}
+/* Selected pilgrimage cards: force dark nested panels to render true white text.
+   -webkit-text-fill-color prevents any inherited text-fill styling from legacy rules. */
+body .shell .dest-trip-card.selected .dest-spiritual-guide,
+body .shell .dest-trip-card.selected .trip-checkout{color:#fff!important;-webkit-text-fill-color:#fff!important}
+body .shell .dest-trip-card.selected .dest-spiritual-guide *,
+body .shell .dest-trip-card.selected .trip-checkout *{color:#fff!important;-webkit-text-fill-color:#fff!important}
+body .shell .dest-trip-card.selected .dest-spiritual-guide strong,
+body .shell .dest-trip-card.selected .dest-spiritual-guide p,
+body .shell .dest-trip-card.selected .trip-checkout h3,
+body .shell .dest-trip-card.selected .trip-checkout strong,
+body .shell .dest-trip-card.selected .trip-checkout small,
+body .shell .dest-trip-card.selected .trip-checkout span,
+body .shell .dest-trip-card.selected .trip-checkout .trip-secure{color:#fff!important;-webkit-text-fill-color:#fff!important;opacity:1!important}
 
 /* Icons on dark areas are white by default. */
 .home-v3-daily svg,
@@ -63,10 +67,10 @@
 [class~="dark-surface"] svg,
 [class~="vinde-dark"] svg{color:#fff!important}
 
-/* Intentional champagne accents may stay champagne, but never dark/gray. */
+/* Intentional champagne accents may stay champagne. */
 .dest-dark-card>svg,
 .dest-spiritual-guide>svg,
-.trip-checkout-head>svg{color:#d1b07d!important}
+.trip-checkout-head>svg{color:#d1b07d!important;-webkit-text-fill-color:initial!important}
 
 /* Checkout selection outline keeps the brand accent without sacrificing text contrast. */
 .trip-payment-options button,
@@ -74,7 +78,7 @@
 .trip-payment-options button strong,
 .trip-payment-options button small,
 .trip-stepper button,
-.trip-stepper button *{color:#fff!important}
+.trip-stepper button *{color:#fff!important;-webkit-text-fill-color:#fff!important}
 .trip-payment-options button.active{border-color:#d1b07d!important}
 
 /* Champagne CTA: dark navy text is required on the LIGHT champagne surface. */
@@ -88,15 +92,8 @@
 .trip-pay-button *{
   background:#d1b07d!important;
   color:#13233a!important;
+  -webkit-text-fill-color:#13233a!important;
   border-color:#d1b07d!important;
   font-weight:900!important;
 }
-.trip-pay-button:hover,.trip-pay-button:active{background:#c6a36d!important;color:#13233a!important}
-
-/* Explicit protection for the pilgrimage spiritual card shown in the UI. */
-.dest-spiritual-guide,
-.dest-spiritual-guide p,
-.dest-spiritual-guide strong,
-.dest-spiritual-guide span,
-.dest-spiritual-guide small,
-.dest-spiritual-guide div{color:#fff!important}
+.trip-pay-button:hover,.trip-pay-button:active{background:#c6a36d!important;color:#13233a!important;-webkit-text-fill-color:#13233a!important}
