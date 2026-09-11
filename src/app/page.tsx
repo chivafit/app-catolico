@@ -1,2 +1,12 @@
-import {AppShell} from "@/components/AppShell";import {HomeReference} from "@/components/HomeReference";import {WelcomeGate} from "@/components/WelcomeGate";import {getCampaigns,getEvents,getParish,getPilgrimages,getProducts,getTodayDevotional} from "@/lib/data";import {buildFaithRecommendations} from "@/lib/recommendations";
-export default async function HomePage(){const [d,events,parish,campaigns,pilgrimages,products]=await Promise.all([getTodayDevotional(),getEvents(),getParish(),getCampaigns(),getPilgrimages(),getProducts()]);const recommendations=buildFaithRecommendations({devotional:d,events,parish,campaigns,pilgrimages,products});return <WelcomeGate><AppShell hideHeader><HomeReference devotional={d} event={events[0]||null} recommendations={recommendations}/></AppShell></WelcomeGate>}
+import {AppShell} from "@/components/AppShell";
+import {HomeReference} from "@/components/HomeReference";
+import {WelcomeGate} from "@/components/WelcomeGate";
+import {getCampaigns,getEvents,getMassSchedules,getParish,getPilgrimages,getProducts,getTodayDevotional} from "@/lib/data";
+import {buildFaithRecommendations} from "@/lib/recommendations";
+
+export default async function HomePage(){
+ const [d,events,parish,campaigns,pilgrimages,products]=await Promise.all([getTodayDevotional(),getEvents(),getParish(),getCampaigns(),getPilgrimages(),getProducts()]);
+ const massSchedules=parish?.id?await getMassSchedules(parish.id):[];
+ const recommendations=buildFaithRecommendations({devotional:d,events,parish,campaigns,pilgrimages,products});
+ return <WelcomeGate><AppShell hideHeader><HomeReference devotional={d} event={events[0]||null} parish={parish} massSchedules={massSchedules} recommendations={recommendations}/></AppShell></WelcomeGate>;
+}
