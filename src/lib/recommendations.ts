@@ -12,6 +12,6 @@ export function buildFaithRecommendations(c:Context):FaithRecommendation[]{
  const ev=c.events?.[0];if(ev)out.push({id:`event-${ev.id}`,title:ev.title,subtitle:"Próximo da vida da comunidade",href:"/eventos",kind:"event",priority:75});
  const campaign=c.campaigns?.[0];if(campaign)out.push({id:`campaign-${campaign.id}`,title:campaign.title,subtitle:"Uma forma concreta de participar",href:"/campanhas",kind:"campaign",priority:60});
  const trip=c.pilgrimages?.[0];if(trip)out.push({id:`pilgrimage-${trip.id}`,title:trip.title,subtitle:"Caminhos de fé para conhecer",href:"/peregrinacoes",kind:"pilgrimage",priority:45});
- const product=c.products?.[0];if(product)out.push({id:`product-${product.id}`,title:product.title||product.name,subtitle:"Selecionado na Loja Ágora Fide",href:"/loja",kind:"shop",priority:30});
+ const product=c.products?.[0];if(product)out.push({id:`product-${product.id}`,title:product.title||product.name,subtitle:"Selecionado na Loja Vinde",href:"/loja",kind:"shop",priority:30});
  return out.sort((a,b)=>b.priority-a.priority).slice(0,5);
 }
