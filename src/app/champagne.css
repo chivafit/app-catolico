@@ -1,0 +1,26 @@
+/* Ágora Fide — Champagne system: warm, premium, differentiated without cold blue/neon */
+:root{--bg:#eee9df;--paper:#fbf8f1;--paper2:#f3ede2;--ink:#2d2822;--muted:#81776b;--green:#74624d;--green2:#574838;--accent:#e3c991;--accent-ink:#342a20;--cobalt:#a98758;--cobalt2:#896a43;--navy:#5a4938;--sand:#e8dcc7;--charcoal:#463b31;--rose:#f2e4da;--success:#e8e0cb;--soft:#f2ece2;--gold:#a98758;--line:rgba(91,70,47,.11);--shadow:0 14px 34px rgba(74,57,39,.07)}
+body{background:#ebe7df;color:var(--ink)}.shell,.shell-no-header{background:var(--paper)}
+/* global cold-color cleanup */
+.brand-cross,.eyebrow,.product-price,.navitem.active,.v3-section-head a,.v3-event span,.church-title a,.explore-heading a{color:var(--cobalt)}
+.avatar,.home-v3-avatar,.inner-avatar{background:var(--navy)!important}.cta,.selected,.chip-button.selected,.moment-tabs a.active,.explore-chips button.active,.shop-chips button.active{background:var(--cobalt)!important;color:#fff!important}.cta:hover{background:var(--cobalt2)!important}
+.tag,.iconbox,.profile-ref-settings,.church-map-mini,.shop-cart{background:#efe5d4!important;color:var(--cobalt)!important}.pill,.cta.secondary{background:#f0eadf!important;color:#6e5b45!important}
+.grid>.card:nth-child(4n+2){background:#f3ede2}.grid>.card:nth-child(4n+3){background:#eee2d0}.grid>.card:nth-child(4n+4){background:#e7ddcf}
+/* Home */
+.home-v3-daily{background:radial-gradient(circle at 92% 0%,rgba(226,201,151,.42) 0,transparent 44%),linear-gradient(135deg,#584737 0%,#80684e 100%)!important;color:#fff}.home-v3-daily>span{color:#e8d9bf}.home-v3-daily p{color:#f0e6d6}.home-v3-cta{background:#e4cb96!important;color:#342a20!important}.week-days .done{background:#b18e5d!important;color:#fff}.week-days .today{border-color:#a98758!important;color:#8d6d45!important}.v3-module.navy{background:#5b4938!important}.v3-module.cobalt{background:#ad8958!important}.v3-module.sand{background:#e7d8bd!important;color:#342d25}.v3-module.charcoal{background:#493e34!important}.v3-recs>a:nth-child(2){background:#efe4d2}.v3-recs>a:nth-child(3){background:#e8dcc8}.home-v3-shortcuts a:nth-child(2){background:#efe4d2;color:#80623e}.home-v3-shortcuts a:nth-child(3){background:#e8ded0;color:#665440}
+/* Journey */
+body .moment-topbar{background:rgba(251,248,241,.96)}body .moment-audio{background:#5a4938!important}body .moment-extra:nth-of-type(even){background:#f2eadf}
+/* Church */
+body .church-avatar{background:#a98758!important}body .church-quick a:nth-child(1){background:#efe4d2;color:#84663f}body .church-quick a:nth-child(2){background:#e7ddcf;color:#665440}body .church-quick a:nth-child(3){background:#ead9bd;color:#725930}body .church-quick a:nth-child(4){background:#f1ece4;color:#4c4238}body .church-sheet blockquote{background:#5a4938!important}body .church-notice:nth-of-type(even){background:#efe4d2}
+/* Explore */
+body .explore-list>a:nth-child(even){background:#efe4d2}body .explore-hero span{color:#84663f}
+/* Store */
+body .shop-banner a{background:#e4cb96!important;color:#342a20!important}body .shop-cat:nth-child(1){background:#efe4d2;color:#84663f}body .shop-cat:nth-child(2){background:#ead9bd;color:#725930}body .shop-cat:nth-child(3){background:#e7ddcf;color:#665440}body .shop-cat:nth-child(4){background:#f1ece4;color:#4c4238}body .shop-product:nth-child(even){background:#efe4d2}
+/* Profile */
+body .profile-ref-avatar{background:#5a4938!important}body .profile-ref-row:nth-child(2),body .profile-ref-row:nth-child(6){background:#efe4d2}body .profile-ref-row:nth-child(4){background:#ead9bd}body .profile-ref-icon{color:#8b6b44}
+/* Cart/forms */
+body .cart-ref-qty,.choice.active-choice{background:#efe4d2!important;border-color:#b49366!important}body .cart-ref-notice,.notice{background:#eee2d0!important}input,select,.searchbox{border-color:var(--line)}
+/* Inner navigation */
+.inner-topbar{background:rgba(251,248,241,.95)!important;border-bottom-color:var(--line)!important}.inner-back{background:#f1eadf!important;color:#5c4a39!important}.inner-back:active{background:#e8dac5!important;color:#7b5d39!important}
+/* Bottom navigation */
+.bottomnav{background:rgba(251,248,241,.97)!important;border-top-color:rgba(91,70,47,.10)!important}.navitem{color:#8b8175}.navitem.active{color:#8b6b44!important}
