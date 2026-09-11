@@ -1,6 +1,7 @@
 /* VINDE — contrast guardrails
-   Global rule: intentionally dark branded surfaces always use readable light text.
-   Loaded last so legacy component colors cannot override accessibility. */
+   Accessibility rule: dark branded surfaces NEVER use navy, black or gray text.
+   All readable content becomes white; champagne is reserved for intentional accents/CTAs.
+   Loaded last so legacy component colors cannot override this rule. */
 
 .home-v3-daily,
 .v3-module.navy,
@@ -18,55 +19,25 @@
 [class~="dark-surface"],
 [class~="vinde-dark"]{color:#fff!important}
 
-/* Primary content on dark surfaces */
-.home-v3-daily :is(h1,h2,h3,h4,h5,h6,strong,b,label),
-.v3-module.navy :is(h1,h2,h3,h4,h5,h6,strong,b,label),
-.v3-module.cobalt :is(h1,h2,h3,h4,h5,h6,strong,b,label),
-.v3-module.charcoal :is(h1,h2,h3,h4,h5,h6,strong,b,label),
-.shop-banner :is(h1,h2,h3,h4,h5,h6,strong,b,label),
-.auth-v3-hero :is(h1,h2,h3,h4,h5,h6,strong,b,label),
-.dest-dark-card :is(h1,h2,h3,h4,h5,h6,strong,b,label),
-.dest-spiritual-guide :is(h1,h2,h3,h4,h5,h6,strong,b,label),
-.trip-checkout :is(h1,h2,h3,h4,h5,h6,strong,b,label),
-.church-sheet blockquote :is(h1,h2,h3,h4,h5,h6,strong,b,label),
-.store-banner :is(h1,h2,h3,h4,h5,h6,strong,b,label),
-.sidebar :is(h1,h2,h3,h4,h5,h6,strong,b,label),
-.hero-card :is(h1,h2,h3,h4,h5,h6,strong,b,label),
-[class~="dark-surface"] :is(h1,h2,h3,h4,h5,h6,strong,b,label),
-[class~="vinde-dark"] :is(h1,h2,h3,h4,h5,h6,strong,b,label){color:#fff!important}
+/* Hard guardrail: EVERY textual descendant on a dark surface is white.
+   This deliberately overrides old selectors that were leaking navy/gray into dark cards. */
+.home-v3-daily :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
+.v3-module.navy :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
+.v3-module.cobalt :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
+.v3-module.charcoal :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
+.shop-banner :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
+.auth-v3-hero :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
+.dest-dark-card :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
+.dest-spiritual-guide :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
+.trip-checkout :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
+.church-sheet blockquote :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
+.store-banner :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
+.sidebar :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
+.hero-card :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
+[class~="dark-surface"] :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div),
+[class~="vinde-dark"] :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button,div){color:#fff!important}
 
-/* Supporting copy on dark surfaces */
-.home-v3-daily :is(p,small),
-.v3-module.navy :is(p,small),
-.v3-module.cobalt :is(p,small),
-.v3-module.charcoal :is(p,small),
-.shop-banner :is(p,small),
-.auth-v3-hero :is(p,small),
-.dest-dark-card :is(p,small),
-.dest-spiritual-guide :is(p,small),
-.trip-checkout :is(p,small),
-.church-sheet blockquote :is(p,small),
-.store-banner :is(p,small),
-.sidebar :is(p,small),
-.hero-card :is(p,small),
-[class~="dark-surface"] :is(p,small),
-[class~="vinde-dark"] :is(p,small){color:#edf2f7!important}
-
-/* Checkout needs explicit span protection because several legacy selectors target spans */
-.trip-checkout .trip-passengers span,
-.trip-checkout .trip-deposit span,
-.trip-checkout .trip-total span,
-.trip-checkout .trip-payment-options span,
-.trip-checkout .trip-payment-options strong,
-.trip-checkout .trip-payment-title,
-.trip-checkout .trip-stepper b{color:#fff!important}
-.trip-checkout .trip-passengers small,
-.trip-checkout .trip-payment-options small,
-.trip-checkout .trip-deposit,
-.trip-checkout .trip-secure{color:#dbe3ec!important}
-.trip-checkout .trip-total strong{color:#fff!important}
-
-/* Icons inherit readable foreground, with champagne used only as accent */
+/* Icons on dark areas are white by default. */
 .home-v3-daily svg,
 .v3-module.navy svg,
 .v3-module.cobalt svg,
@@ -81,21 +52,38 @@
 .sidebar svg,
 .hero-card svg,
 [class~="dark-surface"] svg,
-[class~="vinde-dark"] svg{color:currentColor}
-.dest-dark-card>svg,.dest-spiritual-guide>svg,.trip-checkout-head>svg{color:#d1b07d!important}
+[class~="vinde-dark"] svg{color:#fff!important}
 
-/* Champagne CTA: dark text is mandatory for contrast */
+/* Intentional champagne accents may stay champagne, but never dark/gray. */
+.dest-dark-card>svg,
+.dest-spiritual-guide>svg,
+.trip-checkout-head>svg{color:#d1b07d!important}
+
+/* Checkout selection outline keeps the brand accent without sacrificing text contrast. */
+.trip-payment-options button,
+.trip-payment-options button span,
+.trip-payment-options button strong,
+.trip-payment-options button small,
+.trip-stepper button,
+.trip-stepper button *{color:#fff!important}
+.trip-payment-options button.active{border-color:#d1b07d!important}
+
+/* Champagne CTA: dark navy text is required on the LIGHT champagne surface. */
 .trip-pay-button,
 .trip-pay-button:link,
-.trip-pay-button:visited{
+.trip-pay-button:visited,
+.trip-pay-button *{
   background:#d1b07d!important;
   color:#13233a!important;
   border-color:#d1b07d!important;
   font-weight:900!important;
 }
 .trip-pay-button:hover,.trip-pay-button:active{background:#c6a36d!important;color:#13233a!important}
-.trip-pay-button *{color:#13233a!important}
 
-/* Specific pilgrimage card protection */
-.dest-spiritual-guide strong{color:#fff!important}
-.dest-spiritual-guide p{color:#f7f8fa!important}
+/* Explicit protection for the pilgrimage spiritual card shown in the UI. */
+.dest-spiritual-guide,
+.dest-spiritual-guide p,
+.dest-spiritual-guide strong,
+.dest-spiritual-guide span,
+.dest-spiritual-guide small,
+.dest-spiritual-guide div{color:#fff!important}
