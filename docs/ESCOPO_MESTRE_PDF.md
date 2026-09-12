@@ -1,4 +1,4 @@
-# Ágora Fide — Escopo Mestre
+# Vinde — Escopo Mestre
 
 Este arquivo fixa no repositório o escopo do documento mestre de funcionalidades aprovado em 10/09/2026. O PDF é a fonte de verdade para o que o produto deve fazer; o design mobile-first aprovado é a referência de interface.
 
