@@ -1,4 +1,4 @@
-# Ágora Fide — MVP
+# Vinde — MVP
 
 Plataforma católica digital orientada a hábito, comunidade e transações.
 
