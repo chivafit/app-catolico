@@ -10,6 +10,7 @@ import "./phase2a.css";
 import "./interactions.css";
 import "./brand-identity.css";
 import "./brand-identity-v2.css";
+import "./brand-identity-secondary.css";
 import type {Metadata} from "next";
 import {AuthProvider} from "@/components/AuthProvider";
 import {AuthUrlHandler} from "@/components/AuthUrlHandler";
