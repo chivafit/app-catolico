@@ -4,6 +4,7 @@ import "./recommendations.css";
 import "./premium.css";
 import "./inner-nav.css";
 import "./momento-premium.css";
+import "./momento-editorial.css";
 import "./vinde-theme.css";
 import "./contrast-guardrails.css";
 import "./phase2a.css";
