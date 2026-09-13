@@ -1,3 +1,35 @@
-import {BookOpen,Heart,Headphones,CheckCircle2,Sparkles} from "lucide-react";import {AppShell} from "@/components/AppShell";import {DailyActions} from "@/components/DailyActions";import {DailyHistory} from "@/components/DailyHistory";import {GospelAudioButton} from "@/components/GospelAudioButton";import {MomentTopActions} from "@/components/MomentTopActions";import {getTodayDevotional} from "@/lib/data";import journey from "@/components/JourneyFinish.module.css";
+import {BookOpen,Heart,Headphones,CheckCircle2,Sparkles,Volume2} from "lucide-react";
+import {AppShell} from "@/components/AppShell";
+import {DailyActions} from "@/components/DailyActions";
+import {DailyHistory} from "@/components/DailyHistory";
+import {GospelAudioButton} from "@/components/GospelAudioButton";
+import {MomentTopActions} from "@/components/MomentTopActions";
+import {getTodayDevotional} from "@/lib/data";
+import journey from "@/components/JourneyFinish.module.css";
+
 const bibleImage="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=1400&q=88";
-export default async function Momento(){const d=await getTodayDevotional();const now=new Date();const dateLabel=now.toLocaleDateString("pt-BR",{weekday:"long",day:"numeric",month:"long"});const gospel=d?.scripture_excerpt||"Naquele tempo, os onze discípulos foram para a Galileia, ao monte que Jesus lhes tinha indicado. Quando o viram, prostraram-se diante dele. Alguns, porém, duvidaram. Então, Jesus aproximou-se e disse-lhes: «Toda a autoridade me foi dada no céu e na terra. Ide, portanto, e fazei discípulos de todos os povos.»";return <AppShell><div className="moment-premium"><div className="moment-premium-actions-row"><span>Jornada de hoje</span><MomentTopActions id={d?.id} title={d?.title||"Momento Diário"}/></div><section className="moment-premium-hero" style={{backgroundImage:`linear-gradient(180deg,rgba(48,40,32,.08),rgba(48,40,32,.68)),url(${bibleImage})`}}><div className="moment-premium-hero-copy"><span>{dateLabel.charAt(0).toUpperCase()+dateLabel.slice(1)}</span><h2>{d?.title||"Eu estou convosco todos os dias."}</h2><p>{d?.scripture_reference||"Mt 28,20"}</p><div className="moment-premium-progress"><span>Seu momento de hoje</span><strong>5 min</strong></div></div></section><nav className="moment-premium-tabs"><a className="active" href="#evangelho"><BookOpen size={15}/>Evangelho</a><a href="#reflexao"><Sparkles size={15}/>Reflexão</a><a href="#oracao"><Heart size={15}/>Oração</a><a href="#proposito"><CheckCircle2 size={15}/>Propósito</a></nav><section className="moment-premium-card gospel" id="evangelho"><div className="moment-premium-label">PALAVRA DO DIA</div><h2>Evangelho de hoje</h2><h3>{d?.scripture_reference||"Mateus 28,16-20"}</h3><p>{gospel}</p><div className="moment-premium-audio"><Headphones size={18}/><div><strong>Ouvir o Evangelho</strong><small>Narração masculina, serena e contemplativa</small></div><GospelAudioButton audioUrl={d?.audio_url} text={gospel}/></div></section><section className="moment-premium-card reflection" id="reflexao"><div className="moment-premium-icon"><Sparkles/></div><div><span>REFLEXÃO</span><h2>O que essa Palavra quer dizer para você hoje?</h2><p>{d?.reflection||"Reserve alguns minutos para acolher a Palavra e perceber o que ela desperta em você hoje."}</p></div></section><section className="moment-premium-card prayer" id="oracao"><div className="moment-premium-icon"><Heart/></div><div><span>ORAÇÃO</span><h2>Fale com Deus</h2><p>{d?.prayer||"Senhor, orienta minhas escolhas e meu dia. Amém."}</p></div></section><section className="moment-premium-card purpose" id="proposito"><div className="moment-premium-icon"><CheckCircle2/></div><div><span>PROPÓSITO</span><h2>Leve a Palavra para o seu dia</h2><p>{d?.purpose||"Faça hoje um gesto concreto de escuta e cuidado."}</p></div></section><section className={journey.wrap}><div className={journey.hero}><div><span className={journey.kicker}>SUA JORNADA</span><h2>Continue cultivando constância.</h2><p>Pequenos passos, grandes encontros com Deus.</p></div><div className={journey.historyDock}><DailyHistory/></div></div><DailyActions devotionalId={d?.id} title={d?.title||"Momento Diário"}/></section></div></AppShell>}
+
+export default async function Momento(){
+ const d=await getTodayDevotional();
+ const now=new Date();
+ const dateLabel=now.toLocaleDateString("pt-BR",{day:"2-digit",month:"long"});
+ const gospel=d?.scripture_excerpt||"Naquele tempo, os onze discípulos foram para a Galileia, ao monte que Jesus lhes tinha indicado. Quando o viram, prostraram-se diante dele. Alguns, porém, duvidaram. Então, Jesus aproximou-se e disse-lhes: «Toda a autoridade me foi dada no céu e na terra. Ide, portanto, e fazei discípulos de todos os povos.»";
+ const heroTitle=d?.title||"Vinde a mim todos os que estais cansados e sobrecarregados, e eu vos aliviarei.";
+ const ref=d?.scripture_reference||"Mt 11,28";
+ return <AppShell><div className="moment-editorial">
+  <header className="moment-editorial-head"><div><h1>Momento</h1><p>Sua dose diária de fé</p></div><MomentTopActions id={d?.id} title={heroTitle}/></header>
+  <div className="moment-editorial-date">{dateLabel}</div>
+  <section className="moment-editorial-hero" style={{backgroundImage:`url(${bibleImage})`}}><div className="moment-editorial-hero-copy"><blockquote>“{heroTitle}”</blockquote><span>{ref}</span></div></section>
+  <div className="moment-editorial-actions"><div><span><Volume2 size={18}/></span><b>Ouvir</b><GospelAudioButton audioUrl={d?.audio_url} text={gospel}/></div><a href="#reflexao"><span><Sparkles size={18}/></span><b>Refletir</b></a><a href="#oracao"><span><Heart size={18}/></span><b>Orar</b></a></div>
+
+  <section className="moment-editorial-reading" id="evangelho"><div className="moment-editorial-label"><BookOpen size={15}/> PALAVRA DO DIA</div><h2>Evangelho de hoje</h2><h3>{ref}</h3><p>{gospel}</p></section>
+
+  <section className="moment-editorial-feature reflection" id="reflexao"><span className="moment-editorial-feature-icon"><Sparkles/></span><div><small>REFLEXÃO</small><h2>O que essa Palavra quer dizer para você hoje?</h2><p>{d?.reflection||"Reserve alguns minutos para acolher a Palavra e perceber o que ela desperta em você hoje."}</p></div></section>
+
+  <div className="moment-editorial-pair"><section id="oracao"><span><Heart size={18}/></span><small>ORAÇÃO</small><h3>Fale com Deus</h3><p>{d?.prayer||"Senhor, orienta minhas escolhas e meu dia. Amém."}</p></section><section id="proposito"><span><CheckCircle2 size={18}/></span><small>PROPÓSITO</small><h3>Leve para o dia</h3><p>{d?.purpose||"Faça hoje um gesto concreto de escuta e cuidado."}</p></section></div>
+
+  <section className="moment-editorial-more"><div className="moment-editorial-more-head"><div><small>CONTINUE SEU CAMINHO</small><h2>Mais para sua fé</h2></div></div><div className="moment-editorial-more-grid"><a href="#evangelho"><BookOpen/><span>Evangelho</span></a><a href="#reflexao"><Sparkles/><span>Reflexões</span></a><a href="#oracao"><Heart/><span>Orações</span></a><a href="#proposito"><CheckCircle2/><span>Propósitos</span></a></div></section>
+
+  <section className={journey.wrap}><div className={journey.hero}><div><span className={journey.kicker}>SUA JORNADA</span><h2>Continue cultivando constância.</h2><p>Pequenos passos, grandes encontros com Deus.</p></div><div className={journey.historyDock}><DailyHistory/></div></div><DailyActions devotionalId={d?.id} title={heroTitle}/></section>
+ </div></AppShell>
+}
