@@ -1,0 +1,35 @@
+/* Secondary/legacy screens — Vinde identity guardrails */
+:is([class*="solidarity"],[class*="destination"],[class*="product-ref"],[class*="menu-"],[class*="auth-"],[class*="onboarding"],[class*="oracoes"],[class*="champagne"],[class*="phase2"]){color:var(--vinde-ink)!important}
+:is([class*="solidarity"],[class*="destination"],[class*="product-ref"],[class*="menu-"],[class*="auth-"],[class*="onboarding"],[class*="oracoes"]) :is(h1,h2,h3){font-family:Georgia,"Times New Roman",serif!important;font-weight:500!important;letter-spacing:-.025em}
+:is([class*="solidarity"],[class*="destination"],[class*="product-ref"],[class*="menu-"],[class*="auth-"],[class*="onboarding"],[class*="oracoes"]) :is(button,a[role="button"]){border-radius:999px}
+
+/* cards and light surfaces */
+:is([class*="solidarity"],[class*="destination"],[class*="product-ref"],[class*="menu-"],[class*="auth-"],[class*="onboarding"],[class*="oracoes"]) :is(.card,[class*="card"],[class*="panel"],[class*="box"],[class*="row"]){border-color:var(--vinde-line)!important}
+:is([class*="menu-"],[class*="auth-"],[class*="onboarding"],[class*="oracoes"]) :is([class*="card"],[class*="panel"],[class*="box"],[class*="row"]){background:var(--vinde-paper)!important}
+
+/* typography + supporting text */
+:is([class*="solidarity"],[class*="destination"],[class*="product-ref"],[class*="menu-"],[class*="auth-"],[class*="onboarding"],[class*="oracoes"]) :is(p,small,[class*="muted"],[class*="subtitle"],[class*="description"]){color:var(--vinde-muted)!important}
+:is([class*="solidarity"],[class*="destination"],[class*="product-ref"],[class*="menu-"],[class*="auth-"],[class*="onboarding"],[class*="oracoes"]) :is([class*="kicker"],[class*="eyebrow"],[class*="label"],[class*="tag"]){color:var(--vinde-terra)!important}
+
+/* actions and selection */
+:is([class*="solidarity"],[class*="destination"],[class*="product-ref"],[class*="menu-"],[class*="auth-"],[class*="onboarding"],[class*="oracoes"]) :is([class*="primary"],[class*="active"],[class*="selected"]){background-color:var(--vinde-terra)!important;color:white!important;border-color:var(--vinde-terra)!important}
+:is([class*="solidarity"],[class*="destination"],[class*="product-ref"],[class*="menu-"],[class*="auth-"],[class*="onboarding"],[class*="oracoes"]) :is([class*="secondary"],[class*="chip"],[class*="pill"]){background-color:var(--vinde-sand-soft)!important;color:var(--vinde-terra-dark)!important;border-color:#DECDB7!important}
+
+/* icons and highlights */
+:is([class*="solidarity"],[class*="destination"],[class*="product-ref"],[class*="menu-"],[class*="auth-"],[class*="onboarding"],[class*="oracoes"]) :is([class*="icon"],svg){color:inherit}
+:is([class*="solidarity"],[class*="destination"],[class*="product-ref"],[class*="menu-"],[class*="auth-"],[class*="onboarding"],[class*="oracoes"]) [class*="icon"]{background-color:var(--vinde-sand-soft)!important;color:var(--vinde-terra-dark)!important}
+
+/* form surfaces */
+:is([class*="auth-"],[class*="onboarding"],[class*="menu-"],[class*="oracoes"]) :is(input,select,textarea){background:var(--vinde-paper)!important;color:var(--vinde-ink)!important;border-color:var(--vinde-line)!important}
+
+/* legacy hard-coded blue families, without changing text on dark image overlays */
+:is(.shell,.shell-no-header) :is([class*="banner"],[class*="summary"],[class*="hero"])[style*="background"]{border-color:var(--vinde-line)}
+[class*="solidarity"][class*="hero"],[class*="destination"][class*="hero"]{color:white}
+
+/* settings/legal/admin utility pages */
+:is(.legal,.narrow,.admin-layout,.profile-list){color:var(--vinde-ink)!important}
+:is(.legal,.narrow,.admin-layout,.profile-list) :is(h1,h2,h3){font-family:Georgia,"Times New Roman",serif!important;font-weight:500!important}
+.sidebar{background:var(--vinde-olive-dark)!important}.sidebar a{color:#fff!important}
+
+/* status/feedback colors stay semantic; neutral framing follows brand */
+.notice{background:#F6F0E7!important;border-color:var(--vinde-line)!important}
