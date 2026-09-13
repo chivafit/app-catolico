@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Vinde</title>
+  <desc id="desc">Ícone do Vinde com símbolo de portal, pessoa e caminho.</desc>
+  <rect width="512" height="512" rx="112" fill="#FCF9F3"/>
+  <path fill="#92482E" d="M94 414V220C94 121 166 52 256 52s162 69 162 168v194h-71V223c0-62-40-101-91-101s-91 39-91 101v191H94Z"/>
+  <circle cx="256" cy="197" r="36" fill="#C6A57B"/>
+  <path fill="#C6A57B" d="M233 250c34 10 64 33 78 64 12 27 11 59-5 87-12 22-32 39-57 49l-31-57c19-8 30-20 34-36 5-21-6-39-34-56l15-51Z"/>
+</svg>
