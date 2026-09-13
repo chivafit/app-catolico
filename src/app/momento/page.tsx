@@ -1,4 +1,4 @@
-import {BookOpen,Heart,Headphones,CheckCircle2,Sparkles,Volume2} from "lucide-react";
+import {BookOpen,Heart,CheckCircle2,Sparkles,Volume2} from "lucide-react";
 import {AppShell} from "@/components/AppShell";
 import {DailyActions} from "@/components/DailyActions";
 import {DailyHistory} from "@/components/DailyHistory";
@@ -6,6 +6,7 @@ import {GospelAudioButton} from "@/components/GospelAudioButton";
 import {MomentTopActions} from "@/components/MomentTopActions";
 import {getTodayDevotional} from "@/lib/data";
 import journey from "@/components/JourneyFinish.module.css";
+import "./momento-editorial.css";
 
 const bibleImage="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=1400&q=88";
 
