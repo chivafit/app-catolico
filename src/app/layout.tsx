@@ -9,6 +9,7 @@ import "./contrast-guardrails.css";
 import "./phase2a.css";
 import "./interactions.css";
 import "./brand-identity.css";
+import "./brand-identity-v2.css";
 import type {Metadata} from "next";
 import {AuthProvider} from "@/components/AuthProvider";
 import {AuthUrlHandler} from "@/components/AuthUrlHandler";
@@ -16,7 +17,8 @@ import {AuthUrlHandler} from "@/components/AuthUrlHandler";
 export const metadata:Metadata={
   title:"Vinde — Mais perto do essencial",
   description:"Fé, comunidade, encontros e caminhos para viver o essencial todos os dias.",
-  themeColor:"#92482E"
+  themeColor:"#92482E",
+  icons:{icon:"/vinde-app-icon.svg",apple:"/vinde-app-icon.svg"}
 };
 
 export default function RootLayout({children}:{children:React.ReactNode}){
