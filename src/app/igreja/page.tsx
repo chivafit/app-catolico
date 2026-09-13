@@ -24,7 +24,7 @@ export default function Igreja(){
  const address=selected?[selected.address,selected.city,selected.state].filter(Boolean).join(", "):"Piumhi, MG";
  const mapSrc=`https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;const directions=`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`;
  return <AppShell><div className={`${styles.page} ${polish.communityV2}`}>
-  <div className={polish.communityHero} style={{backgroundImage:`linear-gradient(0deg,rgba(16,35,58,.84),rgba(16,35,58,.08)),url(${selected?.photo_url||fallback})`}}><span>COMUNIDADE VINDE</span><h1>{selected?.name||"Sua comunidade"}</h1><p>{selected?.city||"Piumhi"} · fé vivida perto de você</p></div>
+  <div className={polish.communityHero} style={{backgroundImage:`linear-gradient(0deg,rgba(39,33,29,.86),rgba(63,70,51,.08)),url(${selected?.photo_url||fallback})`}}><span>COMUNIDADE VINDE</span><h1>{selected?.name||"Sua comunidade"}</h1><p>{selected?.city||"Piumhi"} · fé vivida perto de você</p></div>
   <div className={styles.search}><Search size={18}/><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Buscar igreja ou comunidade"/></div>
   <div className={polish.communityActions}><a href={directions} target="_blank" rel="noreferrer"><Navigation/><span>Como chegar</span></a><a href="#horarios"><Clock3/><span>Horários</span></a><a href="#eventos"><CalendarDays/><span>Eventos</span></a><Link href="/campanhas"><Heart/><span>Doações</span></Link></div>
   <div className={styles.map}><iframe title="Mapa das igrejas" src={mapSrc} loading="lazy" referrerPolicy="no-referrer-when-downgrade"/></div>
