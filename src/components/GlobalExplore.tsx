@@ -1,31 +1,28 @@
 "use client";
 import Link from "next/link";
 import {useEffect,useMemo,useState} from "react";
-import {Search,ArrowRight,BookOpen,Heart,Church,MapPinned,CalendarDays,HandHeart,Sparkles,BookMarked} from "lucide-react";
+import {Search,ChevronRight} from "lucide-react";
 import {getSupabase} from "@/lib/supabase";
-import "./explore-reference.css";
+import styles from "@/app/vindeReference.module.css";
 
 type Kind="all"|"event"|"pilgrimage"|"content";
-type Item={id:string;kind:Exclude<Kind,"all">;title:string;subtitle:string;date?:string;href:string;image:string};
-const labels:Record<Kind,string>={all:"Tudo",event:"Eventos",pilgrimage:"Peregrinações",content:"Palavra"};
-const fallback:Record<Exclude<Kind,"all">,string>={event:"/daily-hero.svg",pilgrimage:"/church-hero.svg",content:"/welcome-hero.svg"};
+type Item={id:string;kind:Exclude<Kind,"all">;title:string;subtitle:string;href:string;image:string};
+const labels:Record<Kind,string>={all:"Todos",event:"Eventos",pilgrimage:"Peregrinações",content:"Conteúdos"};
+const fall={event:"https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80",pilgrimage:"https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=800&q=80",content:"https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=800&q=80"};
 const norm=(v:string)=>(v||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
-const paths=[
- {href:"/momento",title:"Momento Diário",text:"Evangelho, reflexão, oração e propósito",icon:BookOpen},
- {href:"/oracoes",title:"Orações",text:"Encontre palavras para cada momento",icon:Heart},
- {href:"/igreja",title:"Minha Igreja",text:"Paróquia, comunidade e vida sacramental",icon:Church},
- {href:"/peregrinacoes",title:"Peregrinações",text:"Destinos de fé e viagens pelo Vinde",icon:MapPinned},
- {href:"/eventos",title:"Eventos",text:"Encontros, missas e experiências",icon:CalendarDays},
- {href:"/campanhas",title:"Campanhas",text:"Apoie causas e iniciativas da comunidade",icon:HandHeart}
-];
 export function GlobalExplore(){
- const [all,setAll]=useState<Item[]>([]),[q,setQ]=useState(""),[kind,setKind]=useState<Kind>("all"),[loading,setLoading]=useState(true),[error,setError]=useState("");
- useEffect(()=>{(async()=>{try{const s=getSupabase();const [ev,pi,de]=await Promise.all([
-  s.from("events").select("id,title,description,starts_at,location,image_url,status").eq("status","published").order("starts_at").limit(40),
-  s.from("pilgrimages").select("id,title,destination,starts_at,image_url,status,pilgrimage_destinations(name,slug,hero_image_url)").eq("status","published").order("starts_at").limit(40),
-  s.from("daily_devotionals").select("id,title,scripture_reference,devotional_date,image_url,published").eq("published",true).order("devotional_date",{ascending:false}).limit(40)
- ]);const rows:Item[]=[];(ev.data||[]).forEach((x:any)=>rows.push({id:x.id,kind:"event",title:x.title,subtitle:x.location||x.description||"Evento",date:x.starts_at,href:"/eventos",image:x.image_url||fallback.event}));(pi.data||[]).forEach((x:any)=>{const dest=Array.isArray(x.pilgrimage_destinations)?x.pilgrimage_destinations[0]:x.pilgrimage_destinations;const slug=dest?.slug;rows.push({id:x.id,kind:"pilgrimage",title:x.title||dest?.name||x.destination,subtitle:dest?.name||x.destination||"Peregrinação",date:x.starts_at,href:slug?`/peregrinacoes/${slug}?trip=${x.id}`:"/peregrinacoes",image:x.image_url||dest?.hero_image_url||fallback.pilgrimage})});(de.data||[]).forEach((x:any)=>rows.push({id:x.id,kind:"content",title:x.title,subtitle:x.scripture_reference||"Palavra do dia",date:x.devotional_date,href:"/momento",image:x.image_url||fallback.content}));setAll(rows)}catch(e:any){setError(e?.message||"Não foi possível carregar o Explorar.")}finally{setLoading(false)}})()},[]);
+ const [all,setAll]=useState<Item[]>([]),[q,setQ]=useState(""),[kind,setKind]=useState<Kind>("all"),[loading,setLoading]=useState(true);
+ useEffect(()=>{(async()=>{const s=getSupabase();const [ev,pi,de]=await Promise.all([
+  s.from("events").select("id,title,description,location,image_url,status").eq("status","published").limit(30),
+  s.from("pilgrimages").select("id,title,destination,image_url,status,pilgrimage_destinations(name,slug,hero_image_url)").eq("status","published").limit(30),
+  s.from("daily_devotionals").select("id,title,scripture_reference,image_url,published").eq("published",true).limit(30)
+ ]);const rows:Item[]=[];(ev.data||[]).forEach((x:any)=>rows.push({id:x.id,kind:"event",title:x.title,subtitle:x.location||x.description||"Evento",href:"/eventos",image:x.image_url||fall.event}));(pi.data||[]).forEach((x:any)=>{const d=Array.isArray(x.pilgrimage_destinations)?x.pilgrimage_destinations[0]:x.pilgrimage_destinations;rows.push({id:x.id,kind:"pilgrimage",title:x.title||d?.name||x.destination,subtitle:d?.name||x.destination||"Peregrinação",href:d?.slug?`/peregrinacoes/${d.slug}?trip=${x.id}`:"/peregrinacoes",image:x.image_url||d?.hero_image_url||fall.pilgrimage})});(de.data||[]).forEach((x:any)=>rows.push({id:x.id,kind:"content",title:x.title,subtitle:x.scripture_reference||"Palavra do dia",href:"/momento",image:x.image_url||fall.content}));setAll(rows);setLoading(false)})()},[]);
  const filtered=useMemo(()=>all.filter(x=>(kind==="all"||x.kind===kind)&&(!q||norm(`${x.title} ${x.subtitle}`).includes(norm(q)))),[all,q,kind]);
- const hero=filtered.find(x=>x.kind==="pilgrimage")||filtered.find(x=>x.kind==="event")||filtered[0];const featured=filtered.filter(x=>x.id!==hero?.id).slice(0,4);const content=filtered.filter(x=>x.kind==="content").slice(0,4);
- const fmt=(d?:string)=>d?new Date(d).toLocaleDateString("pt-BR",{day:"2-digit",month:"long"}):"";
- return <div className="explore-ref"><div className="explore-intro"><span>DESCUBRA NO VINDE</span><h1>Explore sua fé</h1><p>Um lugar para encontrar oração, Palavra, comunidade, experiências e caminhos que aproximam você de Deus.</p></div><div className="explore-search"><Search size={20}/><input value={q} onChange={e=>setQ(e.target.value)} placeholder="O que você procura hoje?" aria-label="Buscar no Vinde"/></div><section className="explore-paths"><div className="explore-section-title"><div><span>COMECE POR AQUI</span><h2>Para viver sua fé</h2></div></div><div className="explore-path-grid">{paths.map(({href,title,text,icon:Icon})=><Link href={href} key={href} className="explore-path"><span><Icon size={20}/></span><div><h3>{title}</h3><p>{text}</p></div><ArrowRight size={16}/></Link>)}</div></section><div className="explore-section-title discover"><div><span>ACONTECENDO NO VINDE</span><h2>Descubra algo novo</h2></div></div><div className="explore-chips">{(Object.keys(labels) as Kind[]).map(k=><button key={k} className={kind===k?"active":""} onClick={()=>setKind(k)}>{labels[k]}</button>)}</div>{loading?<div className="explore-empty">Preparando conteúdos para você...</div>:error?<div className="explore-empty">{error}</div>:hero?<><Link href={hero.href} className="explore-hero" style={{backgroundImage:`linear-gradient(0deg,rgba(20,38,63,.88),rgba(20,38,63,.06)),url(${hero.image})`}}><div><small>{labels[hero.kind]}</small><h2>{hero.title}</h2><p>{hero.subtitle}</p><b>{fmt(hero.date)}</b></div><span><ArrowRight size={19}/></span></Link>{featured.length>0&&<><div className="explore-heading"><h2>Em destaque</h2><span>Escolhidos para você</span></div><div className="explore-featured">{featured.map(x=><Link href={x.href} key={`${x.kind}-${x.id}`} className="explore-feature" style={{backgroundImage:`linear-gradient(0deg,rgba(20,38,63,.9),rgba(20,38,63,.08)),url(${x.image})`}}><div><small>{labels[x.kind]}</small><h3>{x.title}</h3><p>{fmt(x.date)||x.subtitle}</p></div></Link>)}</div></>}{content.length>0&&<><div className="explore-heading"><h2>Palavra para o seu dia</h2><Link href="/momento">Abrir Momento Diário</Link></div><div className="explore-list">{content.map(x=><Link href={x.href} key={`${x.kind}-${x.id}`}><div className="explore-thumb" style={{backgroundImage:`url(${x.image})`}}/><div><span>PALAVRA DO DIA</span><h3>{x.title}</h3><p>{x.subtitle}</p></div><BookMarked size={18}/></Link>)}</div></>}{q&&<div className="explore-results"><div className="explore-heading"><h2>Resultados</h2><span>{filtered.length} encontrado{filtered.length===1?"":"s"}</span></div>{filtered.map(x=><Link className="explore-result-row" href={x.href} key={`result-${x.kind}-${x.id}`}><div><small>{labels[x.kind]}</small><h3>{x.title}</h3><p>{x.subtitle}</p></div><span>›</span></Link>)}</div>}<Link href="/momento" className="explore-closing"><Sparkles size={20}/><div><span>UM MINUTO PARA VOCÊ</span><h2>Não sabe por onde começar?</h2><p>Comece pela Palavra de hoje.</p></div><ArrowRight size={18}/></Link></>:<div className="explore-empty">Nenhum conteúdo encontrado para essa busca.</div>}</div>}
+ return <div className={styles.page}>
+  <div className={`${styles.title} ${styles.center}`}><h1>Explorar</h1><p>Encontre experiências, conteúdos e caminhos para viver sua fé.</p></div>
+  <div className={styles.search}><Search size={18}/><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Buscar no Vinde"/></div>
+  <div className={styles.chips}>{(Object.keys(labels) as Kind[]).map(k=><button key={k} className={kind===k?styles.active:""} onClick={()=>setKind(k)}>{labels[k]}</button>)}</div>
+  <div className={styles.sectionHead}><h2>Descubra</h2><span>{filtered.length} opções</span></div>
+  {loading?<div className={styles.empty}>Carregando experiências…</div>:filtered.length?<div className={styles.list}>{filtered.map(x=><Link href={x.href} key={`${x.kind}-${x.id}`} className={styles.row}><img src={x.image} alt=""/><div><strong>{x.title}</strong><small>{x.subtitle}</small></div><ChevronRight size={18}/></Link>)}</div>:<div className={styles.empty}>Nada encontrado para esta busca.</div>}
+ </div>
+}
