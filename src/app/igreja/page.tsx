@@ -3,7 +3,7 @@ import {useEffect,useMemo,useState} from "react";
 import Link from "next/link";
 import {AppShell} from "@/components/AppShell";
 import {getSupabase} from "@/lib/supabase";
-import {Search,MapPin,Clock3,ChevronRight,Navigation,CalendarDays,Bell,Heart,UsersRound,Church as ChurchIcon} from "lucide-react";
+import {Search,MapPin,Clock3,ChevronRight,Navigation,CalendarDays,Bell,Heart,Church as ChurchIcon,UsersRound,Landmark,ClipboardList} from "lucide-react";
 import styles from "./igreja.module.css";
 
 const fallback="https://images.unsplash.com/photo-1438032005730-c779502df39b?auto=format&fit=crop&w=1200&q=84";
@@ -25,11 +25,19 @@ export default function Igreja(){
  const address=selected?[selected.address,selected.city,selected.state].filter(Boolean).join(", "):"Piumhi, MG";
  const mapSrc=`https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
  const directions=`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`;
+ const parishParam=selected?.id?`?paroquia=${encodeURIComponent(selected.id)}`:"";
  return <AppShell><div className={styles.page}>
   <section className={styles.intro}><span className={styles.eyebrow}>SUA COMUNIDADE</span><h1>Igreja perto de você.</h1><p>Encontre paróquias, horários, eventos e caminhos para participar mais da vida da comunidade.</p></section>
   <label className={styles.search}><Search size={17}/><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Buscar igreja, cidade ou endereço"/></label>
   {selected&&<section className={styles.hero} style={{backgroundImage:`url(${selected.photo_url||fallback})`}}><div className={styles.heroCopy}><small>COMUNIDADE SELECIONADA</small><h2>{selected.name}</h2><p><MapPin size={12}/>{selected.city||"Piumhi"}{selected.state?` · ${selected.state}`:""}</p></div></section>}
   <div className={styles.actions}><a href={directions} target="_blank" rel="noreferrer"><Navigation/><span>Como chegar</span></a><a href="#horarios"><Clock3/><span>Horários</span></a><a href="#eventos"><CalendarDays/><span>Eventos</span></a><Link href="/campanhas"><Heart/><span>Doações</span></Link></div>
+
+  <section className={styles.parishLife}><div className={styles.sectionHead}><div><small className={styles.miniEyebrow}>VIVA SUA COMUNIDADE</small><h2>Participe mais de perto</h2></div></div><div className={styles.parishLifeGrid}>
+   <Link href={`/igreja/pastorais${parishParam}`}><span><UsersRound size={21}/></span><div><strong>Pastorais e movimentos</strong><small>Catequese, ECC, EJC, Terço dos Homens, RCC e muito mais.</small></div><ChevronRight size={17}/></Link>
+   <Link href={`/igreja/secretaria${parishParam}`}><span><Landmark size={21}/></span><div><strong>Sacramentos & Secretaria</strong><small>Batismo, casamento, curso de noivos, crisma, intenções e documentos.</small></div><ChevronRight size={17}/></Link>
+   <Link href={`/igreja/secretaria${parishParam}#formacao`}><span><ClipboardList size={21}/></span><div><strong>Formação e inscrições</strong><small>Catequese, encontros, preparação sacramental e inscrições.</small></div><ChevronRight size={17}/></Link>
+  </div></section>
+
   {selected&&<section className={styles.mapWrap}><div className={styles.map}><iframe title="Mapa da igreja" src={mapSrc} loading="lazy" referrerPolicy="no-referrer-when-downgrade"/></div><div className={styles.mapBar}><div><small>LOCALIZAÇÃO</small><strong>{address}</strong></div><a href={directions} target="_blank" rel="noreferrer"><Navigation size={14}/>Rota</a></div></section>}
   <section className={styles.section} id="horarios"><div className={styles.sectionHead}><h2>Missas de hoje</h2><span>{selected?.name||"Comunidade"}</span></div><div className={styles.massCard}><span className={styles.massIcon}><Clock3 size={19}/></span><div><small>HORÁRIOS</small><strong>{todayMasses.length?todayMasses.map(m=>hh(m.starts_at)).join(" · "):"Consulte a programação da paróquia"}</strong></div></div></section>
   {parishPosts.length>0&&<section className={styles.section}><div className={styles.sectionHead}><h2>Hoje na comunidade</h2><span>Avisos</span></div><div className={styles.notices}>{parishPosts.map(p=><article className={styles.notice} key={p.id}><span><Bell size={16}/></span><div><strong>{p.title}</strong><p>{p.body}</p></div></article>)}</div></section>}
