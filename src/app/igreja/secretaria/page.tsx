@@ -1,27 +1,29 @@
+"use client";
+import {useEffect,useMemo,useState} from "react";
 import Link from "next/link";
 import {AppShell} from "@/components/AppShell";
-import {Heart,Church,BookOpen,FileText,Baby,UsersRound,CalendarDays,ChevronRight,ArrowLeft} from "lucide-react";
+import {useAuth} from "@/components/AuthProvider";
+import {getSupabase} from "@/lib/supabase";
+import {Heart,Church,BookOpen,FileText,Baby,UsersRound,CalendarDays,ChevronRight,ArrowLeft,CheckCircle2,Clock3,ClipboardList} from "lucide-react";
 import styles from "../vida-paroquial.module.css";
 
-const sacraments=[
- {name:"Batismo",desc:"Orientações, documentos, encontro de pais e padrinhos e datas disponíveis.",cta:"Iniciar preparação",icon:Baby},
- {name:"Matrimônio",desc:"Primeiros passos para celebrar o casamento na Igreja e organizar o processo paroquial.",cta:"Quero me casar na Igreja",icon:Heart},
- {name:"Curso de noivos",desc:"Preparação para o matrimônio, encontros e orientações para o casal.",cta:"Ver preparação",icon:UsersRound},
- {name:"Primeira Eucaristia",desc:"Informações sobre catequese, idade, turmas e preparação sacramental.",cta:"Ver inscrição",icon:BookOpen},
- {name:"Crisma",desc:"Turmas, preparação, encontros e documentação necessária.",cta:"Ver inscrição",icon:Church},
- {name:"Confissão",desc:"Consulte horários e orientações para o sacramento da Reconciliação.",cta:"Consultar",icon:Church}
-];
-const office=[
- {name:"Intenção de missa",desc:"Orientações para solicitar intenção e verificar celebrações disponíveis.",icon:CalendarDays},
- {name:"Certidões e documentos",desc:"Batismo, casamento e outros registros emitidos pela secretaria paroquial.",icon:FileText},
- {name:"Atendimento paroquial",desc:"Horários da secretaria e direcionamento para o atendimento adequado.",icon:Church},
- {name:"Inscrição na catequese",desc:"Informações sobre turmas, faixa etária, responsáveis e período de matrícula.",icon:BookOpen}
-];
-
-export default function Secretaria(){return <AppShell><div className={styles.page}>
- <section className={styles.hero}><span className={styles.eyebrow}>SECRETARIA PAROQUIAL</span><h1>Sacramentos e serviços</h1><p>Um ponto de partida simples para entender etapas, documentos e preparação antes de falar com a sua paróquia.</p></section>
- <section className={styles.section} id="formacao"><div className={styles.sectionHead}><small>SACRAMENTOS & FORMAÇÃO</small><h2>Para cada momento da vida</h2></div><div className={styles.grid}>{sacraments.map(({name,desc,cta,icon:Icon})=><a href="#atendimento" className={styles.card} key={name}><span className={styles.icon}><Icon size={19}/></span><strong>{name}</strong><p>{desc}</p><span>{cta}</span></a>)}</div></section>
- <section className={styles.section} id="atendimento"><div className={styles.sectionHead}><small>SECRETARIA</small><h2>Serviços paroquiais</h2></div><div className={styles.featured}>{office.map(({name,desc,icon:Icon})=><div className={styles.featuredRow} key={name}><span><Icon size={18}/></span><div><strong>{name}</strong><small>{desc}</small></div><ChevronRight size={16}/></div>)}</div></section>
- <div className={styles.note}><strong>Sobre casamento e batismo</strong><p>O Vinde não trata esses sacramentos como uma reserva comum. A ideia é iniciar o processo: mostrar requisitos, preparação, documentos e datas indicadas pela paróquia; a confirmação final depende da secretaria e das normas pastorais locais.</p></div>
- <Link href="/igreja" className={styles.back}><ArrowLeft size={15}/>Voltar para Igreja</Link>
+const iconFor=(slug:string)=>slug==="batismo"?Baby:slug==="matrimonio"?Heart:slug.includes("noivos")?UsersRound:slug.includes("catequese")||slug.includes("eucaristia")?BookOpen:slug==="crisma"?Church:slug.includes("missa")?CalendarDays:slug.includes("certidoes")?FileText:ClipboardList;
+const arr=(v:any)=>Array.isArray(v)?v:[];
+export default function Secretaria(){
+ const {user,profile}=useAuth();
+ const [services,setServices]=useState<any[]>([]),[parish,setParish]=useState<any>(null),[loading,setLoading]=useState(true),[open,setOpen]=useState<any>(null),[name,setName]=useState(profile?.full_name||""),[phone,setPhone]=useState(profile?.phone||""),[date,setDate]=useState(""),[notes,setNotes]=useState(""),[saving,setSaving]=useState(false),[sent,setSent]=useState(false);
+ useEffect(()=>{(async()=>{const s=getSupabase();const params=new URLSearchParams(window.location.search);let parishId=params.get("paroquia")||localStorage.getItem("vinde-parish-id")||profile?.primary_parish_id||"";if(!parishId){const {data}=await s.from("parishes").select("id").order("name").limit(1).maybeSingle();parishId=data?.id||""}if(parishId)localStorage.setItem("vinde-parish-id",parishId);const [p,sv]=await Promise.all([s.from("parishes").select("id,name,city,state,phone,whatsapp,secretary_hours").eq("id",parishId).maybeSingle(),s.from("parish_services").select("*").eq("parish_id",parishId).eq("active",true).order("service_type").order("title")]);setParish(p.data);setServices(sv.data||[]);setLoading(false);const interesse=params.get("interesse");if(interesse){const found=(sv.data||[]).find((x:any)=>x.slug===interesse||x.title.toLowerCase()===interesse.toLowerCase());if(found)setOpen(found)}})()},[profile?.primary_parish_id]);
+ useEffect(()=>{if(profile?.full_name)setName(profile.full_name);if(profile?.phone)setPhone(profile.phone)},[profile?.full_name,profile?.phone]);
+ const formation=useMemo(()=>services.filter(x=>["formation","sacrament"].includes(x.service_type)),[services]);
+ const office=useMemo(()=>services.filter(x=>["service","secretary"].includes(x.service_type)),[services]);
+ async function submit(){if(!open||!parish)return;if(!user){location.href=`/entrar?next=${encodeURIComponent(location.pathname+location.search)}`;return}setSaving(true);const {error}=await getSupabase().from("parish_service_requests").insert({parish_id:parish.id,service_id:open.id,user_id:user.id,requester_name:name||null,phone:phone||null,preferred_date:date||null,notes:notes||null,details:{service_slug:open.slug}});setSaving(false);if(!error){setSent(true);setTimeout(()=>{setOpen(null);setSent(false);setDate("");setNotes("")},1800)}}
+ const ServiceCard=({item}:{item:any})=>{const Icon=iconFor(item.slug);return <button type="button" className={styles.card} onClick={()=>{setOpen(item);setSent(false)}}><span className={styles.icon}><Icon size={19}/></span><strong>{item.title}</strong><p>{item.description}</p><span>Ver etapas e solicitar</span></button>};
+ return <AppShell><div className={styles.page}>
+  <section className={styles.hero}><span className={styles.eyebrow}>SECRETARIA PAROQUIAL</span><h1>Sacramentos e serviços</h1><p>{parish?`Etapas, documentos e solicitações de ${parish.name}.`:"Um ponto de partida simples para sua vida sacramental e paroquial."}</p></section>
+  {parish&&<div className={styles.parishStrip}><div><small>COMUNIDADE</small><strong>{parish.name}</strong><span>{parish.city}{parish.state?`/${parish.state}`:""}</span></div>{parish.secretary_hours&&<div><small>SECRETARIA</small><strong>{parish.secretary_hours}</strong></div>}</div>}
+  {loading?<div className={styles.note}>Carregando serviços da paróquia…</div>:<><section className={styles.section} id="formacao"><div className={styles.sectionHead}><small>SACRAMENTOS & FORMAÇÃO</small><h2>Para cada momento da vida</h2></div><div className={styles.grid}>{formation.map(item=><ServiceCard item={item} key={item.id}/>)}</div></section><section className={styles.section} id="atendimento"><div className={styles.sectionHead}><small>SECRETARIA</small><h2>Serviços paroquiais</h2></div><div className={styles.featured}>{office.map(item=>{const Icon=iconFor(item.slug);return <button type="button" className={styles.featuredRow} key={item.id} onClick={()=>{setOpen(item);setSent(false)}}><span><Icon size={18}/></span><div><strong>{item.title}</strong><small>{item.description}</small></div><ChevronRight size={16}/></button>})}</div></section></>}
+  <div className={styles.note}><strong>Casamento e Batismo</strong><p>O Vinde inicia e acompanha a solicitação. A confirmação de data, documentos e celebração continua sendo feita pela paróquia conforme suas normas pastorais.</p></div>
+  {user&&<Link href="/igreja/solicitacoes" className={styles.requestLink}><ClipboardList size={16}/>Acompanhar minhas solicitações <ChevronRight size={15}/></Link>}
+  <Link href="/igreja" className={styles.back}><ArrowLeft size={15}/>Voltar para Igreja</Link>
+  {open&&<div className={styles.modalBackdrop} onClick={()=>setOpen(null)}><div className={styles.modal} onClick={e=>e.stopPropagation()}><span className={styles.eyebrow}>SECRETARIA PAROQUIAL</span><h2>{open.title}</h2><p>{open.description}</p>{arr(open.requirements).length>0&&<div className={styles.detailBlock}><strong>Antes de começar</strong>{arr(open.requirements).map((x:string)=><span key={x}>• {x}</span>)}</div>}{arr(open.documents).length>0&&<div className={styles.detailBlock}><strong>Documentos que podem ser solicitados</strong>{arr(open.documents).map((x:string)=><span key={x}>• {x}</span>)}</div>}{open.preparation&&<div className={styles.infoLine}><BookOpen size={15}/>{open.preparation}</div>}{open.availability_note&&<div className={styles.infoLine}><Clock3 size={15}/>{open.availability_note}</div>}{sent?<div className={styles.success}><CheckCircle2/> Solicitação enviada. Você pode acompanhar o andamento no Vinde.</div>:<><label className={styles.field}>Seu nome<input value={name} onChange={e=>setName(e.target.value)}/></label><label className={styles.field}>Telefone / WhatsApp<input value={phone} onChange={e=>setPhone(e.target.value)}/></label><label className={styles.field}>Data de preferência, se houver<input type="date" value={date} onChange={e=>setDate(e.target.value)}/></label><label className={styles.field}>Observações<textarea value={notes} onChange={e=>setNotes(e.target.value)} placeholder="Conte o que a secretaria precisa saber para iniciar seu atendimento."/></label><button className={styles.primaryButton} onClick={submit} disabled={saving}>{saving?"Enviando…":user?"Enviar solicitação":"Entrar para solicitar"}</button></>}</div></div>}
  </div></AppShell>}
