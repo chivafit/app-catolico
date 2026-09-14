@@ -1,26 +1,22 @@
+"use client";
+import {useEffect,useState} from "react";
 import Link from "next/link";
 import {AppShell} from "@/components/AppShell";
-import {UsersRound,BookOpen,HeartHandshake,Music2,Flame,Church,ChevronRight,ArrowLeft} from "lucide-react";
+import {useAuth} from "@/components/AuthProvider";
+import {getSupabase} from "@/lib/supabase";
+import {UsersRound,Clock3,MapPin,Phone,CheckCircle2,ArrowLeft} from "lucide-react";
 import styles from "../vida-paroquial.module.css";
 
-const items=[
- {name:"Catequese",desc:"Iniciação à vida cristã para crianças, adolescentes, jovens e adultos.",icon:BookOpen},
- {name:"ECC",desc:"Encontro de Casais com Cristo e vida comunitária para famílias.",icon:HeartHandshake},
- {name:"EJC",desc:"Encontro de Jovens com Cristo, formação, amizade e missão.",icon:UsersRound},
- {name:"Terço dos Homens",desc:"Oração mariana, fraternidade e encontros periódicos.",icon:Church},
- {name:"Vicentinos",desc:"Serviço aos mais necessitados e presença solidária na comunidade.",icon:HeartHandshake},
- {name:"Coroinhas",desc:"Formação e serviço litúrgico para crianças e adolescentes.",icon:Church},
- {name:"Liturgia",desc:"Leitores, comentaristas, ministros e equipes de celebração.",icon:BookOpen},
- {name:"Música",desc:"Canto, instrumentos e ministérios de música da comunidade.",icon:Music2},
- {name:"RCC",desc:"Renovação Carismática Católica, grupos de oração e formação.",icon:Flame},
- {name:"Pastoral Familiar",desc:"Acolhimento, formação e acompanhamento de famílias e casais.",icon:HeartHandshake},
- {name:"Apostolado da Oração",desc:"Espiritualidade, oração e missão em comunhão com a Igreja.",icon:HeartHandshake},
- {name:"Dízimo",desc:"Pastoral de conscientização, acolhida e corresponsabilidade.",icon:Church}
-];
-
-export default function Pastorais(){return <AppShell><div className={styles.page}>
- <section className={styles.hero}><span className={styles.eyebrow}>VIDA PAROQUIAL</span><h1>Pastorais e movimentos</h1><p>Descubra onde você pode servir, aprender, rezar e participar mais de perto da sua comunidade.</p></section>
- <section className={styles.section}><div className={styles.sectionHead}><small>ENCONTRE SEU LUGAR</small><h2>Comunidades para caminhar junto</h2></div><div className={styles.grid}>{items.map(({name,desc,icon:Icon})=><Link href={`/igreja/secretaria?interesse=${encodeURIComponent(name)}`} className={styles.card} key={name}><span className={styles.icon}><Icon size={19}/></span><strong>{name}</strong><p>{desc}</p><span>Quero participar</span></Link>)}</div></section>
- <div className={styles.note}><strong>Como funciona?</strong><p>O Vinde organiza as opções da comunidade e direciona o interesse para a secretaria ou responsável da pastoral. A disponibilidade e os encontros dependem de cada paróquia.</p></div>
- <Link href="/igreja" className={styles.back}><ArrowLeft size={15}/>Voltar para Igreja</Link>
+export default function Pastorais(){
+ const {user,profile}=useAuth();
+ const [items,setItems]=useState<any[]>([]),[parish,setParish]=useState<any>(null),[loading,setLoading]=useState(true),[open,setOpen]=useState<any>(null),[name,setName]=useState(profile?.full_name||""),[phone,setPhone]=useState(profile?.phone||""),[message,setMessage]=useState(""),[sent,setSent]=useState(false),[saving,setSaving]=useState(false);
+ useEffect(()=>{(async()=>{const s=getSupabase();const params=new URLSearchParams(window.location.search);let parishId=params.get("paroquia")||localStorage.getItem("vinde-parish-id")||profile?.primary_parish_id||"";if(!parishId){const {data}=await s.from("parishes").select("id").order("name").limit(1).maybeSingle();parishId=data?.id||""}if(parishId)localStorage.setItem("vinde-parish-id",parishId);const [p,m]=await Promise.all([s.from("parishes").select("id,name,city,state,phone,whatsapp").eq("id",parishId).maybeSingle(),s.from("parish_ministries").select("*").eq("parish_id",parishId).eq("active",true).order("featured",{ascending:false}).order("name")]);setParish(p.data);setItems(m.data||[]);setLoading(false)})()},[profile?.primary_parish_id]);
+ useEffect(()=>{if(profile?.full_name)setName(profile.full_name);if(profile?.phone)setPhone(profile.phone)},[profile?.full_name,profile?.phone]);
+ async function submit(){if(!open||!parish)return;if(!user){location.href=`/entrar?next=${encodeURIComponent(location.pathname+location.search)}`;return}setSaving(true);const {error}=await getSupabase().from("parish_ministry_interests").insert({parish_id:parish.id,ministry_id:open.id,user_id:user.id,requester_name:name||null,phone:phone||null,message:message||null});setSaving(false);if(!error){setSent(true);setTimeout(()=>{setOpen(null);setSent(false);setMessage("")},1600)}}
+ return <AppShell><div className={styles.page}>
+  <section className={styles.hero}><span className={styles.eyebrow}>VIDA PAROQUIAL</span><h1>Pastorais e movimentos</h1><p>{parish?`Veja o que acontece em ${parish.name} e manifeste seu interesse para a equipe responsável.`:"Descubra onde você pode servir, aprender, rezar e participar mais de perto."}</p></section>
+  {loading?<div className={styles.note}>Carregando vida da comunidade…</div>:<section className={styles.section}><div className={styles.sectionHead}><small>ENCONTRE SEU LUGAR</small><h2>{items.length?"Comunidades para caminhar junto":"Nenhuma pastoral cadastrada"}</h2></div><div className={styles.grid}>{items.map(item=><button type="button" className={styles.card} key={item.id} onClick={()=>{setOpen(item);setSent(false)}}><span className={styles.icon}><UsersRound size={19}/></span><strong>{item.name}</strong><p>{item.description}</p>{item.meeting_schedule&&<small className={styles.meta}><Clock3 size={12}/>{item.meeting_schedule}</small>}<span>Quero participar</span></button>)}</div></section>}
+  {parish&&<div className={styles.note}><strong>Informações da paróquia</strong><p>{parish.name}{parish.city?` · ${parish.city}/${parish.state||""}`:""}. Horários, responsáveis e contatos podem ser atualizados pela própria comunidade.</p></div>}
+  <Link href="/igreja" className={styles.back}><ArrowLeft size={15}/>Voltar para Igreja</Link>
+  {open&&<div className={styles.modalBackdrop} onClick={()=>setOpen(null)}><div className={styles.modal} onClick={e=>e.stopPropagation()}><span className={styles.eyebrow}>QUERO PARTICIPAR</span><h2>{open.name}</h2><p>{open.description}</p>{open.meeting_schedule&&<div className={styles.infoLine}><Clock3 size={15}/>{open.meeting_schedule}</div>}{open.location&&<div className={styles.infoLine}><MapPin size={15}/>{open.location}</div>}{open.contact_phone&&<div className={styles.infoLine}><Phone size={15}/>{open.contact_phone}</div>}{sent?<div className={styles.success}><CheckCircle2/> Interesse enviado. A comunidade poderá entrar em contato com você.</div>:<><label className={styles.field}>Seu nome<input value={name} onChange={e=>setName(e.target.value)}/></label><label className={styles.field}>Telefone / WhatsApp<input value={phone} onChange={e=>setPhone(e.target.value)}/></label><label className={styles.field}>Mensagem opcional<textarea value={message} onChange={e=>setMessage(e.target.value)} placeholder="Conte brevemente como gostaria de participar."/></label><button className={styles.primaryButton} onClick={submit} disabled={saving}>{saving?"Enviando…":user?"Enviar interesse":"Entrar para enviar"}</button></>}</div></div>}
  </div></AppShell>}
