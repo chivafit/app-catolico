@@ -3,6 +3,7 @@ import {notFound} from "next/navigation";
 import {AppShell} from "@/components/AppShell";
 import {ProductReference} from "@/components/ProductReference";
 import {getSupabase} from "@/lib/supabase";
+import {STORE_PRODUCT_SELECT} from "@/lib/store-products";
 import {isServerFetchTimeout,withServerTimeout} from "@/lib/server-fetch";
 import "@/app/product-reference.css";
 
@@ -14,7 +15,7 @@ export default async function Produto({params}:{params:Promise<{slug:string}>}){
  const {slug}=await params;
  try{
   const result:any=await withServerTimeout(
-   getSupabase().from("products").select("id,name,description,price_cents,stock,image_url,category").eq("slug",slug).eq("active",true).maybeSingle(),
+   getSupabase().from("products").select(STORE_PRODUCT_SELECT).eq("slug",slug).eq("active",true).maybeSingle(),
    "product by slug"
   );
   if(result.error){
