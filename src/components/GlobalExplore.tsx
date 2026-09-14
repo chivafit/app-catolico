@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import {useEffect,useMemo,useState} from "react";
-import {Search,ChevronRight,BookOpen,Church,Bus,CalendarDays,Heart,ShoppingBag,Sparkles} from "lucide-react";
+import {Search,ChevronRight,BookOpen,Church,Bus,CalendarDays,Heart,ShoppingBag,Sparkles,UsersRound} from "lucide-react";
 import {getSupabase} from "@/lib/supabase";
 import styles from "@/app/vindeReference.module.css";
 import polish from "@/app/vindePolish.module.css";
@@ -14,6 +14,7 @@ const norm=(v:string)=>(v||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").t
 const paths=[
  {href:"/momento",label:"Evangelho",text:"Palavra e reflexão do dia",icon:BookOpen},
  {href:"/igreja",label:"Igrejas",text:"Comunidade e horários",icon:Church},
+ {href:"/explorar#comunidade",label:"Comunidade",text:"Grupos, vida paroquial e conexões",icon:UsersRound},
  {href:"/peregrinacoes",label:"Peregrinações",text:"Destinos de fé",icon:Bus},
  {href:"/eventos",label:"Eventos",text:"Encontros e celebrações",icon:CalendarDays},
  {href:"/campanhas",label:"Doações",text:"Apoie uma causa",icon:Heart},
@@ -31,7 +32,7 @@ export function GlobalExplore(){
  return <div className={`${styles.page} ${polish.exploreV2}`}>
   <div className={polish.exploreHero}><div><span>EXPLORE O VINDE</span><h1>Um lugar para viver sua fé por inteiro.</h1><p>Descubra oração, comunidade, viagens, eventos e escolhas com propósito.</p></div></div>
   <div className={styles.search}><Search size={18}/><input value={q} onChange={e=>setQ(e.target.value)} placeholder="O que você procura hoje?"/></div>
-  <div className={polish.explorePaths}>{paths.map(({href,label,text,icon:Icon})=><Link href={href} key={href}><span><Icon size={20}/></span><div><strong>{label}</strong><small>{text}</small></div></Link>)}</div>
+  <div className={polish.explorePaths} id="comunidade">{paths.map(({href,label,text,icon:Icon})=><Link href={href} key={`${href}-${label}`}><span><Icon size={20}/></span><div><strong>{label}</strong><small>{text}</small></div></Link>)}</div>
   <div className={styles.sectionHead}><h2>Descubra algo novo</h2><span>{filtered.length} opções</span></div>
   <div className={styles.chips}>{(Object.keys(labels) as Kind[]).map(k=><button key={k} className={kind===k?styles.active:""} onClick={()=>setKind(k)}>{labels[k]}</button>)}</div>
   {loading?<div className={styles.empty}>Carregando experiências…</div>:featured?<><Link href={featured.href} className={polish.exploreFeatured} style={{backgroundImage:`linear-gradient(0deg,rgba(39,33,29,.84),rgba(63,70,51,.04)),url(${featured.image})`}}><span>{labels[featured.kind]}</span><h2>{featured.title}</h2><p>{featured.subtitle}</p><div>Explorar <ChevronRight size={16}/></div></Link>{rest.length>0&&<div className={polish.exploreFeed}>{rest.map(x=><Link href={x.href} key={`${x.kind}-${x.id}`}><img src={x.image} alt=""/><div><small>{labels[x.kind]}</small><strong>{x.title}</strong><p>{x.subtitle}</p></div><ChevronRight size={17}/></Link>)}</div>}<Link href="/momento" className={polish.exploreClosing}><Sparkles size={19}/><div><small>UM MINUTO PARA VOCÊ</small><strong>Comece pela Palavra de hoje.</strong></div><ChevronRight size={17}/></Link></>:<div className={styles.empty}>Nada encontrado para esta busca.</div>}
