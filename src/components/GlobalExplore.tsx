@@ -15,7 +15,7 @@ const paths=[
  {href:"/explorar#comunidade",label:"Comunidade",text:"Grupos, vida paroquial e conexões",icon:UsersRound},
  {href:"/peregrinacoes",label:"Peregrinações",text:"Destinos de fé",icon:Bus},
  {href:"/eventos",label:"Eventos",text:"Encontros e celebrações",icon:CalendarDays},
- {href:"/campanhas",label:"Doações",text:"Apoie uma causa",icon:Heart}
+ {href:"/doacoes",label:"Doações",text:"Apoie uma causa",icon:Heart}
 ];
 const solidarity:Item={id:"solidarity-piumhi",kind:"content",title:"Solidariedade em Piumhi",subtitle:"Instituições locais verificadas e canais seguros para colaborar.",href:"/solidariedade",image:fall.solidarity};
 
