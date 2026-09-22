@@ -1,0 +1,107 @@
+/* Vinde — tokens do redesenho (2026-09-22)
+   Substitui o empilhamento atual de 15 folhas em src/app/layout.tsx.
+   Passo 1: importe SÓ este arquivo + globals mínimo. Remova:
+   premium, champagne, champagne-theme, brand-identity, brand-identity-v2,
+   brand-identity-secondary, soft-theme, momento-premium, momento-editorial,
+   phase2a, contrast-guardrails, discovery, recommendations, cart-reference,
+   menu-reference, product-reference, profile-reference, explore-reference. */
+
+@import url("https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Libre+Franklin:wght@400;500;600;700&display=swap");
+
+:root{
+  /* superfícies */
+  --bg:#FBF7F0;          /* marfim, fundo do app */
+  --surface:#FFFDF8;     /* cartões e campos */
+  --surface-warm:#F1E8D7;/* blocos de apoio, ícones */
+  --ink-block:#1F2A22;   /* único bloco escuro por tela */
+
+  /* tinta */
+  --ink:#1A211C;
+  --ink-2:#35382F;
+  --ink-3:#514F44;
+  --muted:#77776A;
+  --muted-2:#A8A294;
+
+  /* marca (já presente em public/vinde-mark.svg) */
+  --terracotta:#7E3E27;  /* ativo, links de ação, sair */
+  --gold:#8A6A2F;        /* eyebrows, links, ícones */
+  --gold-light:#C3A063;  /* CTA sobre escuro */
+  --gold-ink:#D7B87C;    /* texto de apoio sobre escuro */
+
+  /* linhas */
+  --line:#E3DBCB;
+  --line-soft:#EAE3D5;
+  --line-warm:#E7DFCC;
+
+  /* tipografia */
+  --serif:"Spectral",Georgia,serif;        /* voz, Escritura, números */
+  --sans:"Libre Franklin",Helvetica,sans-serif; /* interface */
+
+  --r-sm:14px; --r:18px; --r-lg:22px; --r-pill:999px;
+  --shadow:0 10px 30px rgba(41,34,22,.10);
+  --touch:64px;  /* altura mínima de linha/alvo */
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--gold);text-decoration:none}
+a:hover{color:#6E5325}
+button,input,select,textarea{font:inherit}
+
+/* Escala tipográfica — mínimos do público 35–60 */
+h1{font:400 32px/1.2 var(--serif);letter-spacing:-.01em;margin:0}
+h2{font:400 24px/1.25 var(--serif);margin:0}
+h3{font:400 21px/1.25 var(--serif);margin:0}
+p{font:400 16px/1.6 var(--sans);color:var(--ink-3);margin:0;text-wrap:pretty}
+.scripture{font:400 italic 22px/1.34 var(--serif)}   /* citação bíblica */
+.eyebrow{font:600 11px/1 var(--sans);letter-spacing:.16em;color:var(--gold);
+  text-transform:uppercase}
+.meta{font:400 14px/1.35 var(--sans);color:var(--muted)}
+
+/* Linha de lista — substitui os cards empilhados */
+.row{display:grid;grid-template-columns:44px 1fr 18px;align-items:center;gap:14px;
+  min-height:var(--touch);padding:14px 0;border-bottom:1px solid var(--line-soft);
+  color:var(--ink)}
+.row:last-child{border-bottom:0}
+.row-icon{width:44px;height:44px;border-radius:50%;background:var(--surface-warm);
+  display:grid;place-items:center;color:var(--gold)}
+.row strong{display:block;font:500 17px/1.2 var(--sans)}
+.row small{display:block;margin-top:4px;font:400 14px/1.35 var(--sans);color:var(--muted)}
+
+/* Bloco escuro: no máximo um por tela (Palavra do dia, destaque da loja) */
+.feature-dark{border-radius:var(--r-lg);overflow:hidden;background:var(--ink-block);
+  color:#F7F2E8}
+.feature-dark .scripture{color:#FBF7F0}
+.cta-gold{height:52px;border-radius:var(--r-sm);background:var(--gold-light);
+  color:#20261D;display:flex;align-items:center;justify-content:center;gap:9px;
+  font:600 16px var(--sans);border:0;width:100%}
+
+/* Seção separada por fio, sem moldura */
+.section{margin-top:34px;padding-top:24px;border-top:1px solid var(--line)}
+
+/* Campos e chips */
+.search{height:54px;border-radius:var(--r-sm);background:var(--surface);
+  border:1px solid var(--line-warm);display:flex;align-items:center;gap:10px;
+  padding:0 16px;color:var(--gold)}
+.search input{border:0;background:transparent;outline:0;width:100%;
+  font:400 16px var(--sans);color:var(--ink)}
+.chip{padding:10px 16px;border-radius:var(--r-pill);background:var(--surface);
+  border:1px solid var(--line-warm);color:#5A5A4E;font:500 14px var(--sans)}
+.chip.active{background:var(--ink-block);color:#F7F2E8;border-color:var(--ink-block)}
+
+/* Barra inferior: Hoje · Palavra · Igreja · Explorar · Loja */
+.bottomnav{display:grid;grid-template-columns:repeat(5,1fr);align-items:center;
+  height:var(--touch);padding:0 6px;background:var(--surface);
+  border:1px solid var(--line-warm);border-radius:20px;box-shadow:var(--shadow)}
+.navitem{display:flex;flex-direction:column;align-items:center;gap:5px;
+  font:400 11px var(--sans);color:#7C7A6E}
+.navitem.active{font-weight:600;color:var(--terracotta)}
+.navitem svg{width:22px;height:22px;stroke-width:1.8}
+
+/* Proibido no novo sistema:
+   - filter:saturate() em fotos
+   - !important
+   - texto abaixo de 13px
+   - mais de um bloco escuro por tela
+   - card dentro de card */

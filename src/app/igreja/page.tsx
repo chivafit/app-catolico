@@ -4,57 +4,120 @@ import Link from "next/link";
 import {AppShell} from "@/components/AppShell";
 import {useAuth} from "@/components/AuthProvider";
 import {getSupabase} from "@/lib/supabase";
-import {Search,MapPin,Clock3,ChevronRight,Navigation,CalendarDays,Bell,Heart,Church as ChurchIcon,UsersRound,Landmark,ClipboardList} from "lucide-react";
-import styles from "./igreja.module.css";
+import {Bell,CalendarDays,ChevronRight,ClipboardList,Church as ChurchIcon,Clock3,HandCoins,Landmark,MapPin,Navigation,Search,UsersRound} from "lucide-react";
+import s from "./igreja.module.css";
 
-const fallback="https://images.unsplash.com/photo-1438032005730-c779502df39b?auto=format&fit=crop&w=1200&q=84";
-const hh=(v?:string|null)=>v?String(v).slice(0,5):"";
+const hh=(v?:string|null)=>v?String(v).slice(0,5).replace(":","h"):"";
+const life=[
+ {slug:"/igreja/pastorais",label:"Pastorais e movimentos",text:"Catequese, ECC, EJC, Terço dos Homens, RCC",icon:UsersRound},
+ {slug:"/igreja/secretaria",label:"Sacramentos e secretaria",text:"Batismo, casamento, crisma, intenções",icon:Landmark},
+ {slug:"/igreja/secretaria#formacao",label:"Formação e inscrições",text:"Encontros e preparação sacramental",icon:ClipboardList}
+];
+
 export default function Igreja(){
  const {profile,loading:authLoading}=useAuth();
- const [parishes,setParishes]=useState<any[]>([]),[schedules,setSchedules]=useState<any[]>([]),[events,setEvents]=useState<any[]>([]),[posts,setPosts]=useState<any[]>([]),[q,setQ]=useState(""),[selectedId,setSelectedId]=useState<string>("");
- useEffect(()=>{const s=getSupabase();Promise.all([
-  s.from("parishes").select("*").order("name"),
-  s.from("mass_schedules").select("*").eq("active",true).order("weekday").order("starts_at"),
-  s.from("events").select("*").eq("status","published").order("starts_at").limit(10),
-  s.from("parish_posts").select("*").not("published_at","is",null).order("published_at",{ascending:false}).limit(8)
+ const [parishes,setParishes]=useState<any[]>([]),[schedules,setSchedules]=useState<any[]>([]),
+  [events,setEvents]=useState<any[]>([]),[posts,setPosts]=useState<any[]>([]),
+  [q,setQ]=useState(""),[searching,setSearching]=useState(false),[selectedId,setSelectedId]=useState("");
+
+ useEffect(()=>{const c=getSupabase();Promise.all([
+  c.from("parishes").select("*").order("name"),
+  c.from("mass_schedules").select("*").eq("active",true).order("weekday").order("starts_at"),
+  c.from("events").select("*").eq("status","published").order("starts_at").limit(10),
+  c.from("parish_posts").select("*").not("published_at","is",null).order("published_at",{ascending:false}).limit(8)
  ]).then(([p,m,e,n])=>{setParishes(p.data||[]);setSchedules(m.data||[]);setEvents(e.data||[]);setPosts(n.data||[])})},[]);
  useEffect(()=>{if(!authLoading&&profile?.primary_parish_id)setSelectedId(profile.primary_parish_id)},[authLoading,profile?.primary_parish_id]);
+
  const filtered=useMemo(()=>parishes.filter(p=>!q||`${p.name} ${p.city||""} ${p.state||""} ${p.address||""}`.toLowerCase().includes(q.toLowerCase())),[parishes,q]);
  const selected=parishes.find(p=>p.id===selectedId);
  const today=new Date().getDay();
  const todayMasses=schedules.filter(m=>m.parish_id===selected?.id&&Number(m.weekday)===today);
  const parishEvents=events.filter(e=>e.parish_id===selected?.id).slice(0,3);
- const parishPosts=posts.filter(p=>p.parish_id===selected?.id).slice(0,3);
- const otherChurches=filtered.filter(p=>p.id!==selected?.id);
+ const parishPosts=posts.filter(p=>p.parish_id===selected?.id).slice(0,2);
+ const others=filtered.filter(p=>p.id!==selected?.id).slice(0,4);
  const address=selected?[selected.address,selected.city,selected.state].filter(Boolean).join(", "):"";
- const mapSrc=address?`https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`:"";
  const directions=address?`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`:"#";
  const parishParam=selected?.id?`?paroquia=${encodeURIComponent(selected.id)}`:"";
- const parishIdentity=selected?[selected.name,[selected.city,selected.state].filter(Boolean).join(", ")].filter(Boolean).join(" — "):"";
- return <AppShell><div className={styles.page}>
-  <section className={styles.intro}><span className={styles.eyebrow}>SUA COMUNIDADE</span><h1>Igreja perto de você.</h1><p>Encontre paróquias, horários, eventos e caminhos para participar mais da vida da comunidade.</p></section>
-  <label className={styles.search}><Search size={17}/><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Buscar igreja, cidade ou endereço"/></label>
 
-  {selected?<section className={styles.hero} style={{backgroundImage:`url(${selected.photo_url||fallback})`}}><div className={styles.heroCopy}><small>MINHA PARÓQUIA</small><h2>{parishIdentity}</h2><p><MapPin size={12}/>{selected.address||[selected.city,selected.state].filter(Boolean).join(" · ")}</p></div></section>:<section className={styles.parishEmpty}><span className={styles.parishEmptyIcon}><ChurchIcon size={21}/></span><div><small>MINHA PARÓQUIA</small><strong>Escolha sua igreja para personalizar esta área.</strong><p>Você verá horários, eventos, avisos e serviços da sua comunidade.</p></div><Link href="/onboarding">Escolher minha igreja</Link></section>}
+ return <AppShell hideHeader>
+  <div className={s.page}>
+   <header className={s.hero} style={selected?.photo_url?{backgroundImage:`url(${selected.photo_url})`}:undefined}>
+    <div className={s.heroTop}>
+     <span className="eyebrow">Sua comunidade</span>
+     <button type="button" className={s.searchToggle} onClick={()=>setSearching(v=>!v)} aria-label="Buscar igreja"><Search size={20}/></button>
+    </div>
+    <div className={s.heroCopy}>
+     <h1>{selected?.name||"Escolha sua igreja"}</h1>
+     <p className="meta"><MapPin size={15}/> {address||"Horários, avisos e serviços da sua comunidade"}</p>
+    </div>
+   </header>
 
-  {selected&&<div className={styles.actions}><a className={styles.primaryAction} href={directions} target="_blank" rel="noreferrer"><Navigation/><span>Como chegar</span></a><a className={styles.primaryAction} href="#horarios"><Clock3/><span>Horários</span></a><a href="#eventos"><CalendarDays/><span>Eventos</span></a><Link href="/doacoes"><Heart/><span>Doações</span></Link></div>}
+   {searching&&<label className={`search ${s.search}`}>
+    <Search size={19}/>
+    <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Buscar igreja, cidade ou endereço" autoFocus/>
+   </label>}
 
-  <section className={styles.parishLife}><div className={styles.sectionHead}><div><small className={styles.miniEyebrow}>VIVA SUA COMUNIDADE</small><h2>Participe mais de perto</h2></div></div><div className={styles.parishLifeGrid}>
-   <Link href={`/igreja/pastorais${parishParam}`}><span><UsersRound size={21}/></span><div><strong>Pastorais e movimentos</strong><small>Catequese, ECC, EJC, Terço dos Homens, RCC e muito mais.</small></div><ChevronRight size={17}/></Link>
-   <Link href={`/igreja/secretaria${parishParam}`}><span><Landmark size={21}/></span><div><strong>Sacramentos & Secretaria</strong><small>Batismo, casamento, curso de noivos, crisma, intenções e documentos.</small></div><ChevronRight size={17}/></Link>
-   <Link href={`/igreja/secretaria${parishParam}#formacao`}><span><ClipboardList size={21}/></span><div><strong>Formação e inscrições</strong><small>Catequese, encontros, preparação sacramental e inscrições.</small></div><ChevronRight size={17}/></Link>
-  </div></section>
+   {!selected&&<Link href="/onboarding" className={s.pick}>
+    <span className="row-icon"><ChurchIcon size={20}/></span>
+    <span><strong>Escolher minha igreja</strong><small>Para ver horários, avisos e serviços</small></span>
+    <ChevronRight size={18}/>
+   </Link>}
 
-  {selected&&mapSrc&&<section className={styles.mapWrap}><div className={styles.map}><iframe title="Mapa da igreja" src={mapSrc} loading="lazy" referrerPolicy="no-referrer-when-downgrade"/></div><div className={styles.mapBar}><div><small>LOCALIZAÇÃO</small><strong>{address}</strong></div><a href={directions} target="_blank" rel="noreferrer"><Navigation size={14}/>Rota</a></div></section>}
+   {selected&&<>
+    <nav className={s.actions}>
+     <a href={directions} target="_blank" rel="noreferrer" data-primary><Navigation size={20}/><span>Rota</span></a>
+     <a href="#horarios"><Clock3 size={20}/><span>Horários</span></a>
+     <a href="#eventos"><CalendarDays size={20}/><span>Eventos</span></a>
+     <Link href="/doacoes"><HandCoins size={20}/><span>Ofertar</span></Link>
+    </nav>
 
-  {selected&&<section className={styles.section} id="horarios"><div className={styles.sectionHead}><h2>Missas de hoje</h2><span>{parishIdentity}</span></div>{todayMasses.length?<div className={styles.massList}>{todayMasses.map(m=><div className={styles.massRow} key={m.id}><span className={styles.massIcon}><Clock3 size={18}/></span><div><strong>{hh(m.starts_at)}</strong><small>{m.label||"Local não informado"}</small></div></div>)}</div>:<div className={styles.emptyState}><span><Clock3 size={20}/></span><div><strong>Nenhum horário cadastrado para hoje</strong><p>Consulte a secretaria paroquial para confirmar a programação.</p></div><Link href={`/igreja/secretaria${parishParam}`}>Falar com a secretaria</Link></div>}</section>}
+    <section className={s.block} id="horarios">
+     <span className="eyebrow">Missas de hoje</span>
+     {todayMasses.length?<div className={s.masses}>{todayMasses.map(m=><div className={s.mass} key={m.id}>
+      <strong>{hh(m.starts_at)}</strong>
+      <span className="meta">{m.label||"Matriz"}</span>
+     </div>)}</div>:<p className={s.empty}>Nenhum horário cadastrado para hoje. Confirme com a secretaria paroquial.</p>}
+    </section>
 
-  {selected&&parishPosts.length>0&&<section className={styles.section}><div className={styles.sectionHead}><h2>Hoje na comunidade</h2><span>Avisos</span></div><div className={styles.notices}>{parishPosts.map(p=><article className={styles.notice} key={p.id}><span><Bell size={16}/></span><div><strong>{p.title}</strong><p>{p.body}</p></div></article>)}</div></section>}
+    {parishPosts.length>0&&<section className={s.block}>
+     <span className="eyebrow">Hoje na comunidade</span>
+     {parishPosts.map(p=><article className={s.notice} key={p.id}>
+      <span className={s.noticeTag}><Bell size={15}/> Aviso</span>
+      <strong>{p.title}</strong>
+      <p>{p.body}</p>
+     </article>)}
+    </section>}
+   </>}
 
-  {selected&&<section className={styles.section} id="eventos"><div className={styles.sectionHead}><h2>Próximos encontros</h2><Link href="/eventos">Ver agenda</Link></div>{parishEvents.length?<div className={styles.events}>{parishEvents.map(e=><Link href="/eventos" key={e.id} className={styles.event}><span><CalendarDays size={17}/></span><div><strong>{e.title}</strong><small>{new Date(e.starts_at).toLocaleDateString("pt-BR",{day:"2-digit",month:"long"})}{e.location?` · ${e.location}`:""}</small></div><ChevronRight size={16}/></Link>)}</div>:<div className={styles.emptyState}><span><CalendarDays size={20}/></span><div><strong>Nenhum evento por aqui ainda</strong><p>Descubra celebrações e encontros de outras comunidades próximas.</p></div><Link href="/explorar">Explorar eventos na região</Link></div>}</section>}
+   <section className={s.block}>
+    <span className="eyebrow">Participe mais de perto</span>
+    <div className={s.rows}>{life.map(({slug,label,text,icon:Icon})=><Link href={`${slug}${parishParam}`} key={label} className="row">
+     <span className="row-icon"><Icon size={20}/></span>
+     <span><strong>{label}</strong><small>{text}</small></span>
+     <ChevronRight size={18}/>
+    </Link>)}</div>
+   </section>
 
-  {otherChurches.length>0&&<section className={styles.section}><div className={styles.sectionHead}><h2>Outras igrejas</h2><span>{otherChurches.length} {otherChurches.length===1?"igreja":"igrejas"}</span></div><div className={styles.churches}>{otherChurches.map(p=><button type="button" key={p.id} className={styles.church} onClick={()=>setSelectedId(p.id)}><img src={p.photo_url||fallback} alt=""/><div><strong>{p.name}</strong><small><MapPin size={10}/>{[p.city,p.state].filter(Boolean).join(", ")||p.address||"Localização não informada"}</small></div><ChevronRight size={16}/></button>)}</div></section>}
+   {selected&&<section className={s.block} id="eventos">
+    <div className={s.head}><span className="eyebrow">Próximos encontros</span><Link href="/eventos">Agenda</Link></div>
+    {parishEvents.length?<div className={s.rows}>{parishEvents.map(e=><Link href="/eventos" key={e.id} className="row">
+     <span className="row-icon"><CalendarDays size={20}/></span>
+     <span><strong>{e.title}</strong><small>{new Date(e.starts_at).toLocaleDateString("pt-BR",{day:"2-digit",month:"long"})}{e.location?` · ${e.location}`:""}</small></span>
+     <ChevronRight size={18}/>
+    </Link>)}</div>:<p className={s.empty}>Nenhum evento por aqui ainda. <Link href="/explorar">Explorar a região</Link></p>}
+   </section>}
 
-  <Link href="/explorar" className={styles.footerCard}><ChurchIcon size={20}/><div><small>DESCUBRA MAIS</small><strong>Explore eventos, peregrinações e experiências de fé no Vinde.</strong></div><ChevronRight size={17}/></Link>
- </div></AppShell>
+   {others.length>0&&<section className={s.block}>
+    <span className="eyebrow">Outras igrejas</span>
+    <div className={s.churches}>{others.map(p=><button type="button" key={p.id} className={s.church} onClick={()=>setSelectedId(p.id)}>
+     {p.photo_url&&<img src={p.photo_url} alt=""/>}
+     <span>
+      <strong>{p.name}</strong>
+      <small className="meta">{[p.city,p.state].filter(Boolean).join(", ")||p.address}</small>
+     </span>
+     <ChevronRight size={18}/>
+    </button>)}</div>
+   </section>}
+  </div>
+ </AppShell>;
 }
