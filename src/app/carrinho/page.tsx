@@ -15,6 +15,7 @@ import {
   Truck,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
+import { useAuth } from "@/components/AuthProvider";
 
 type Item = {
   id: string;
@@ -32,6 +33,7 @@ const brl = (cents: number) =>
   }).format(cents / 100);
 
 export default function Carrinho() {
+  const { user, loading } = useAuth();
   const [items, setItems] = useState<Item[]>([]);
   const [notice, setNotice] = useState("");
 
@@ -222,14 +224,24 @@ export default function Carrinho() {
                 </p>
               )}
 
-              <button
-                className="cart-ref-checkout"
-                onClick={() =>
-                  setNotice("O checkout financeiro ainda não está habilitado no piloto.")
-                }
-              >
-                Finalizar compra <ArrowRight size={20} />
-              </button>
+              {loading ? (
+                <button className="cart-ref-checkout" disabled>
+                  Finalizar compra <ArrowRight size={20} />
+                </button>
+              ) : user ? (
+                <button
+                  className="cart-ref-checkout"
+                  onClick={() =>
+                    setNotice("O checkout financeiro ainda não está habilitado no piloto.")
+                  }
+                >
+                  Finalizar compra <ArrowRight size={20} />
+                </button>
+              ) : (
+                <Link className="cart-ref-checkout" href="/entrar?next=/carrinho">
+                  Entrar para finalizar <ArrowRight size={20} />
+                </Link>
+              )}
 
               <p className="cart-ref-secure">
                 <ShieldCheck size={15} /> Compra segura dentro do Vinde
