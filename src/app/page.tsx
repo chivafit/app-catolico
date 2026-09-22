@@ -1,2 +1,15 @@
-import {AppShell} from "@/components/AppShell";import {HomeReference} from "@/components/HomeReference";import {getCampaigns,getEvents,getParish,getPilgrimages,getProducts,getTodayDevotional} from "@/lib/data";import {buildFaithRecommendations} from "@/lib/recommendations";
-export default async function HomePage(){const [d,events,parish,campaigns,pilgrimages,products]=await Promise.all([getTodayDevotional(),getEvents(),getParish(),getCampaigns(),getPilgrimages(),getProducts()]);const recommendations=buildFaithRecommendations({devotional:d,events,parish,campaigns,pilgrimages,products});return <AppShell hideHeader><HomeReference devotional={d} event={events[0]||null} recommendations={recommendations}/></AppShell>}
+import {AppShell} from "@/components/AppShell";
+import {HomeReference} from "@/components/HomeReference";
+import {getEvents,getMassSchedules,getParish,getTodayDevotional} from "@/lib/data";
+
+export default async function HomePage(){
+ const [devotional,events,parish]=await Promise.all([getTodayDevotional(),getEvents(),getParish()]);
+ const schedules=await getMassSchedules(parish?.id);
+ const now=new Date();
+ const today=now.getDay();
+ const hhmm=now.toTimeString().slice(0,5);
+ const nextMass=schedules.find((m:any)=>Number(m.weekday)===today&&String(m.starts_at).slice(0,5)>=hhmm)||null;
+ return <AppShell hideHeader>
+  <HomeReference devotional={devotional} event={events[0]||null} parish={parish} nextMass={nextMass}/>
+ </AppShell>;
+}
