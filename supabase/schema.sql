@@ -420,7 +420,7 @@ create table public.bookings (
   passengers integer not null default 1 check (passengers > 0),
   total_cents integer not null check (total_cents >= 0),
   status text not null default 'pending'
-    check (status in ('pending','paid','cancelled','refunded')),
+    check (status in ('pending','paid','cancelled','refunded','interest','checkout_started')),
   created_at timestamptz not null default now()
 );
 

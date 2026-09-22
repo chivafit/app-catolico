@@ -1,6 +1,6 @@
-insert into public.dioceses (name, city, state, verified)
-values ('Diocese de Luz', 'Luz', 'MG', true)
-on conflict do nothing;
+insert into public.dioceses (name, slug, city, state, verified)
+values ('Diocese de Luz', 'diocese-de-luz', 'Luz', 'MG', true)
+on conflict (slug) do nothing;
 
 insert into public.parishes (diocese_id, name, slug, city, state, address, verified)
 select d.id, 'Paróquia São Sebastião', 'sao-sebastiao-piumhi', 'Piumhi', 'MG', 'Piumhi - MG', true
